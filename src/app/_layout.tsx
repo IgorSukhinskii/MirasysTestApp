@@ -1,6 +1,8 @@
+import { SessionProvider, useSession } from '@/auth/ctx';
+import { SplashScreenController } from '@/components/SplashScreenController';
+
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
 import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
 
@@ -9,19 +11,29 @@ export {
   ErrorBoundary
 } from 'expo-router';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
 export default function RootLayout() {
-  return <RootLayoutNav />;
+  return (
+    <SessionProvider>
+      <SplashScreenController />
+      <RootNavigator />
+    </SessionProvider>
+  );
 }
 
-function RootLayoutNav() {
+function RootNavigator() {
   const colorScheme = useColorScheme();
+  const { session } = useSession();
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
+        <Stack.Protected guard={!!session}>
+          <Stack.Screen name="(app)" />
+        </Stack.Protected>
+
+        <Stack.Protected guard={!session}>
+          <Stack.Screen name="sign-in" />
+        </Stack.Protected>
       </Stack>
     </ThemeProvider>
   );

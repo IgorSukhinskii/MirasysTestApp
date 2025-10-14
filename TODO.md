@@ -42,9 +42,9 @@ Zustand
 ## Tasks
 
 ### Authentication
-1. Implement authentication as in https://docs.expo.dev/router/advanced/authentication/
+1. ~~Implement authentication as in https://docs.expo.dev/router/advanced/authentication/~~
 1. Put in my own authentication logic with auth routes based on fetch()
-1. Use SecureStore to store tokens on the device
+1. ~~Use SecureStore to store tokens on the device~~
 1. Use Zustand to store tokens in memory (or Context?)
 
 ### TreeView
