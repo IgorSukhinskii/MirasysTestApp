@@ -1,22 +1,35 @@
-import { Text } from '@/components/Themed';
-
-import { router } from 'expo-router';
-import { View } from 'react-native';
-
 import { useSession } from '@/auth/ctx';
 
+import { TextInput, View } from '@/components/Themed';
+import { useState } from 'react';
+import { Button } from 'react-native';
+
+
 export default function SignIn() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
   const { signIn } = useSession();
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text
+      <TextInput
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+      />
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <Button
         onPress={() => {
-          signIn();
-          // Navigate after signing in. You may want to tweak this to ensure sign-in is successful before navigating.
-          router.replace('/');
-        }}>
-        Sign In
-      </Text>
+          signIn(username, password);
+        }}
+        title='Sign In'
+      />
     </View>
   );
 }

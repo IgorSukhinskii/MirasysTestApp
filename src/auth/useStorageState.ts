@@ -2,15 +2,22 @@ import * as SecureStore from 'expo-secure-store';
 import { useCallback, useEffect, useReducer } from 'react';
 import { Platform } from 'react-native';
 
-type UseStateHook<T> = [[boolean, T | null], (value: T | null) => void];
+type UseStateHook<T> = [T | null, (value: T | null) => void];
 
 function useAsyncState<T>(
-  initialValue: [boolean, T | null] = [true, null],
+  initialValue: T | null = null,
 ): UseStateHook<T> {
   return useReducer(
-    (state: [boolean, T | null], action: T | null = null): [boolean, T | null] => [false, action],
+    (state: T | null, action: T | null = null): T | null => action,
     initialValue
   ) as UseStateHook<T>;
+}
+
+export function parseState<T>(stateString: string | null): T | null {
+  const parsedState: T = stateString !== null
+    ? JSON.parse(stateString)
+    : null;
+  return parsedState;
 }
 
 export async function setStorageItemAsync(key: string, value: string | null) {
@@ -33,32 +40,32 @@ export async function setStorageItemAsync(key: string, value: string | null) {
   }
 }
 
-export function useStorageState(key: string): UseStateHook<string> {
+export function useStorageState<T>(key: string): UseStateHook<T> {
   // Public
-  const [state, setState] = useAsyncState<string>();
+  const [state, setState] = useAsyncState<T>();
 
   // Get
   useEffect(() => {
     if (Platform.OS === 'web') {
       try {
         if (typeof localStorage !== 'undefined') {
-          setState(localStorage.getItem(key));
+          setState(parseState(localStorage.getItem(key)));
         }
       } catch (e) {
         console.error('Local storage is unavailable:', e);
       }
     } else {
       SecureStore.getItemAsync(key).then(value => {
-        setState(value);
+        setState(parseState(value));
       });
     }
   }, [key]);
 
   // Set
   const setValue = useCallback(
-    (value: string | null) => {
+    (value: T | null) => {
       setState(value);
-      setStorageItemAsync(key, value);
+      setStorageItemAsync(key, JSON.stringify(value));
     },
     [key]
   );
