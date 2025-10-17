@@ -43,9 +43,10 @@ Zustand
 
 ### Authentication
 1. ~~Implement authentication as in https://docs.expo.dev/router/advanced/authentication/~~
-1. Put in my own authentication logic with auth routes based on fetch()
+1. ~~Put in my own authentication logic with auth routes based on fetch()~~
 1. ~~Use SecureStore to store tokens on the device~~
 1. Use Zustand to store tokens in memory (or Context?)
+1. Make it pretty
 
 ### TreeView
 1. Implement the TreeView component
@@ -77,4 +78,5 @@ Zustand
 1. Tests
 
 ### Housekeeping
-1. Remove all the unnecessary code and deps from the template
+1. ~~Remove all the unnecessary code and deps from the template~~
+1. ~~Stop flashbanging~~

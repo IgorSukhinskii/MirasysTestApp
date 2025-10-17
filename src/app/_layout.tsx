@@ -1,5 +1,6 @@
 import { SessionProvider, useSession } from '@/auth/ctx';
 import { SplashScreenController } from '@/components/SplashScreenController';
+import { View } from '@/components/Themed';
 
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
@@ -23,18 +24,22 @@ export default function RootLayout() {
 function RootNavigator() {
   const colorScheme = useColorScheme();
   const { session } = useSession();
+  const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Protected guard={!!session}>
-          <Stack.Screen name="(app)" />
-        </Stack.Protected>
+    <ThemeProvider value={theme}>
+      {/* Global background themed view prevents white flashes on dark theme */}
+      <View style={{ flex: 1 }}>
+        <Stack>
+          <Stack.Protected guard={!!session}>
+            <Stack.Screen name="(app)" />
+          </Stack.Protected>
 
-        <Stack.Protected guard={!session}>
-          <Stack.Screen name="sign-in" />
-        </Stack.Protected>
-      </Stack>
+          <Stack.Protected guard={!session}>
+            <Stack.Screen name="sign-in" />
+          </Stack.Protected>
+        </Stack>
+      </View>
     </ThemeProvider>
   );
 }

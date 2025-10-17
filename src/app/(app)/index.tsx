@@ -1,7 +1,5 @@
 import { useSession } from '@/auth/ctx';
-import { Text } from '@/components/Themed';
-
-import { View } from 'react-native';
+import { Text, View } from '@/components/Themed';
 
 export default function Index() {
   const { signOut } = useSession();
