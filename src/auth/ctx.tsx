@@ -68,7 +68,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
               setSession(response.data)
             })
             .catch((error: FetchError) => {
-              if (error.code === 'HTTP_ERROR' && error.status === 400) { // INVALID_REFRESH_TOKEN
+              if (error.type === 'HTTP_ERROR' && error.status === 400) { // INVALID_REFRESH_TOKEN
                 console.log('Invalid refresh token. Signing out...');
                 setSession(null);
               } else {

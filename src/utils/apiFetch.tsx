@@ -3,11 +3,11 @@ import Constants from 'expo-constants';
 const baseUrl = Constants.expoConfig?.extra?.baseUrl;
 
 /**
- * Custom error type for errors thrown by `fetchHelper`.
+ * Custom error class for errors thrown by {@link apiFetch}.
  */
 export class FetchError extends Error {
-  /** A short, machine-readable error code. */
-  code: 'NETWORK_ERROR' | 'HTTP_ERROR' | 'PARSE_ERROR';
+  /** A short, machine-readable error type. */
+  type: 'NETWORK_ERROR' | 'HTTP_ERROR' | 'PARSE_ERROR';
   /** The HTTP status code if available, otherwise undefined. */
   status?: number;
   /** Raw response body text if available (useful for debugging). */
@@ -16,13 +16,13 @@ export class FetchError extends Error {
   headers?: Headers;
 
   constructor(
-    code: FetchError['code'],
+    type: FetchError['type'],
     message: string,
     options?: { status?: number; responseBody?: string; headers?: Headers }
   ) {
     super(message);
     this.name = 'FetchError';
-    this.code = code;
+    this.type = type;
     this.status = options?.status;
     this.responseBody = options?.responseBody;
     this.headers = options?.headers;
@@ -32,18 +32,18 @@ export class FetchError extends Error {
 /**
  * Sends a POST request to a specified API endpoint and returns the parsed JSON response.
  *
- * Handles network, HTTP, and parsing errors consistently by throwing a structured `FetchError`.
+ * Handles network, HTTP, and parsing errors consistently by throwing a structured {@link FetchError}.
  *
  * @template TResponse - The expected type of the response data.
- * @param {string} endpoint - The API endpoint to call (relative to `baseUrl`).
+ * @param {string} endpoint - The API endpoint to call (relative to `baseUrl` defined in expoConfig.extra).
  * @param {any} body - The request payload to send in the POST body. Will be serialized as JSON.
  * @returns {Promise<TResponse>} A promise that resolves with the parsed JSON response of type
- * `TResponse` if successful, or rejects with a `FetchError` describing the error.
+ * `TResponse` if successful, or rejects with a {@link FetchError} describing the error.
  *
- * @throws {FetchError} With:
- * - `code = 'NETWORK_ERROR'` if the request failed (e.g., no internet).
- * - `code = 'HTTP_ERROR'` if the response status is not OK (non-2xx). Includes status, headers, and raw body.
- * - `code = 'PARSE_ERROR'` if the response could not be parsed as JSON.
+ * @throws {FetchError} with:
+ * - `type = 'NETWORK_ERROR'` if the request failed (e.g., no internet).
+ * - `type = 'HTTP_ERROR'` if the response status is not OK (non-2xx). Includes status, headers, and raw body.
+ * - `type = 'PARSE_ERROR'` if the response could not be parsed as JSON.
  *
  * @example
  * interface User {
@@ -54,8 +54,8 @@ export class FetchError extends Error {
  * apiFetch<User>('/users', { id: 1 })
  *   .then(user => console.log(user.name))
  *   .catch((err: FetchError) => {
- *     console.error(`[${err.code}] ${err.message}`);
- *     if (err.code === 'HTTP_ERROR') {
+ *     console.error(`[${err.type}] ${err.message}`);
+ *     if (err.type === 'HTTP_ERROR') {
  *       console.error('Status:', err.status);
  *       console.error('Response:', err.responseBody);
  *     }
