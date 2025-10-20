@@ -1,5 +1,4 @@
 import { SessionProvider, useSession } from '@/auth/ctx';
-import { SplashScreenController } from '@/components/SplashScreenController';
 import { View } from '@/components/Themed';
 
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
@@ -15,7 +14,6 @@ export {
 export default function RootLayout() {
   return (
     <SessionProvider>
-      <SplashScreenController />
       <RootNavigator />
     </SessionProvider>
   );
