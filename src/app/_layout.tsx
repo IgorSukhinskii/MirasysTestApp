@@ -23,7 +23,7 @@ export default function RootLayout() {
 
 function RootNavigator() {
   const colorScheme = useColorScheme();
-  const { session } = useSession();
+  const { isLoggedIn } = useSession();
   const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
 
   return (
@@ -31,11 +31,11 @@ function RootNavigator() {
       {/* Global background themed view prevents white flashes on dark theme */}
       <View style={{ flex: 1 }}>
         <Stack>
-          <Stack.Protected guard={!!session}>
+          <Stack.Protected guard={isLoggedIn}>
             <Stack.Screen name="(app)" />
           </Stack.Protected>
 
-          <Stack.Protected guard={!session}>
+          <Stack.Protected guard={!isLoggedIn}>
             <Stack.Screen name="sign-in" />
           </Stack.Protected>
         </Stack>

@@ -35,6 +35,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "baseUrl": "https://iam.mirasys.dev/"
     }
   }
 }
