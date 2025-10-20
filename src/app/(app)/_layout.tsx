@@ -1,6 +1,11 @@
+import ApolloProviderWithSession from '@/components/ApolloProviderWithSession';
 import { Stack } from 'expo-router';
 
 export default function AppLayout() {
-  // This renders the navigation stack for all authenticated app routes.
-  return <Stack />;
+  // Provide Apollo Context only for authenticated routes
+  return (
+    <ApolloProviderWithSession>
+      <Stack />
+    </ApolloProviderWithSession>
+  );
 }

@@ -37,7 +37,8 @@
       "typedRoutes": true
     },
     "extra": {
-      "baseUrl": "https://iam.mirasys.dev/"
+      "baseUrl": "https://iam.mirasys.dev/",
+      "graphqlUrl": "https://router.mirasys.dev/graphql"
     }
   }
 }
