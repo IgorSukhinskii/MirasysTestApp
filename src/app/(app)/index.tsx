@@ -1,44 +1,46 @@
 import { useSession } from '@/auth/ctx';
 import { Text, View } from '@/components/Themed';
+import { LIST_PROFILE_NODES, ListProfileNodesQueryData } from '@/queries/listProfileNodes';
 
-import { gql } from "@apollo/client";
 import { useQuery } from '@apollo/client/react';
+import { ScrollView } from 'react-native';
 
-type ProfileNode = {
-  id: string;
-  name: string;
-  kind: string;
-  parentNodeId: string | null;
-};
+function FolderView({ parentNodeId }: { parentNodeId: string | null }) {
+  const { loading, error, data, fetchMore } = useQuery<ListProfileNodesQueryData>(LIST_PROFILE_NODES, {
+    variables: { parentNodeId: parentNodeId, first: 10 }
+  });
+  console.log('Folder:', parentNodeId, data?.listProfileNodes.edges.length)
 
-type ListProfileNodesQueryData = {
-  listProfileNodes: {
-    nodes: [ProfileNode];
-  };
-};
-
-const LIST_PROFILE_NODES = gql`
-query ListProfileNodes {
-  listProfileNodes(where: {parentNodeId: {eq: null}}, first: 10) {
-    nodes {
-      id
-      name
-      kind
-      parentNodeId
-    }
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-  }
-}`;
+  return (
+    <View style={{ marginLeft: 10 }}>
+      {data?.listProfileNodes.edges.map((edge) => (
+        <View key={edge.node.id}>
+          <Text>{edge.node.kind} | {edge.node.name}</Text>
+        </View>
+      ))}
+      {data?.listProfileNodes.pageInfo.hasNextPage && (
+        <Text
+          style={{ color: "#00f" }}
+          onPress={() => {
+            fetchMore({
+              variables: {
+                after: data.listProfileNodes.pageInfo.endCursor
+              }
+            })
+          }}>More...</Text>
+      )}
+    </View>
+  );
+}
 
 export default function Index() {
   const { signOut, refresh } = useSession();
-  const { loading, error, data } = useQuery<ListProfileNodesQueryData>(LIST_PROFILE_NODES);
-  console.log(loading, error, data);
+  const { loading, error, data, fetchMore } = useQuery<ListProfileNodesQueryData>(LIST_PROFILE_NODES, {
+    variables: { parentNodeId: null, first: 20 }
+  });
+  console.log('Root:', data?.listProfileNodes.edges.length);
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', gap: 50 }}>
+    <ScrollView>
       <Text
         onPress={() => {
           signOut();
@@ -52,10 +54,24 @@ export default function Index() {
         Refresh
       </Text>
       <View>
-        {data?.listProfileNodes.nodes.map((node) => (
-          <Text key={node.id}>{node.name} | {node.kind}</Text>
+        {data?.listProfileNodes.edges.map((edge) => (
+          <View key={edge.node.id}>
+            <Text>{edge.node.kind} | {edge.node.name}</Text>
+            {edge.node.kind === 'FolderNode' && (<FolderView parentNodeId={edge.node.id} />)}
+          </View>
         ))}
       </View>
-    </View>
+      {data?.listProfileNodes.pageInfo.hasNextPage && (
+        <Text
+          style={{ color: "#00f" }}
+          onPress={() => {
+            fetchMore({
+              variables: {
+                after: data.listProfileNodes.pageInfo.endCursor
+              }
+            })
+          }}>More...</Text>
+      )}
+    </ScrollView>
   );
 }

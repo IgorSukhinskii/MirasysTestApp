@@ -1,4 +1,5 @@
 import { useSession } from '@/auth/ctx';
+import { listProfileNodesCachePolicy } from '@/queries/listProfileNodes';
 
 import { ApolloClient, CombinedGraphQLErrors, HttpLink, InMemoryCache } from '@apollo/client';
 import { SetContextLink } from '@apollo/client/link/context';
@@ -41,7 +42,15 @@ export const ApolloProviderWithSession: React.FC<{ children: React.ReactNode; }>
 
   const client = useMemo(() => new ApolloClient({
     link: authErrorLink.concat(authLink).concat(apolloHttpLink),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            listProfileNodes: listProfileNodesCachePolicy
+          },
+        },
+      },
+    }),
   }), [token]);
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
