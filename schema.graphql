@@ -1,0 +1,5122 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+directive @authenticated on ENUM | FIELD_DEFINITION | INTERFACE | OBJECT | SCALAR
+
+directive @inaccessible on ARGUMENT_DEFINITION | ENUM | ENUM_VALUE | FIELD_DEFINITION | INPUT_FIELD_DEFINITION | INPUT_OBJECT | INTERFACE | OBJECT | SCALAR | UNION
+
+directive @requiresScopes(scopes: [[openfed__Scope!]!]!) on ENUM | FIELD_DEFINITION | INTERFACE | OBJECT | SCALAR
+
+directive @tag(name: String!) on ARGUMENT_DEFINITION | ENUM | ENUM_VALUE | FIELD_DEFINITION | INPUT_FIELD_DEFINITION | INPUT_OBJECT | INTERFACE | OBJECT | SCALAR | UNION
+
+"""Alarm resource definition."""
+type Alarm {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  alarmConfiguration: AlarmConfiguration!
+  """Identifier of the alarm configuration."""
+  alarmConfigurationId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Timestamp of when the alarm stopped."""
+  endTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: ID!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Timestamp of when the alarm started."""
+  startTime: DateTime!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Alarm action resource definition."""
+input AlarmActionFilterInput {
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  and: [AlarmActionFilterInput!]
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: StringOperationFilterInput
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  """Alarm trigger type."""
+  kind: StringOperationFilterInput
+  or: [AlarmActionFilterInput!]
+  """Identifier of the parent recorder."""
+  recorderId: StringOperationFilterInput
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+}
+
+"""Alarm action resource definition."""
+input AlarmActionSortInput {
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """Alarm trigger type."""
+  kind: SortEnumType
+  """Identifier of the parent recorder."""
+  recorderId: SortEnumType
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+}
+
+"""A connection to a list of items."""
+type AlarmActionsConnection {
+  """A list of edges."""
+  edges: [AlarmActionsEdge!]
+  """A flattened list of the nodes."""
+  nodes: [IAlarmAction]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type AlarmActionsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: IAlarmAction
+}
+
+"""
+Template for a AlarmConfiguration entity that is used with relation to the AlarmNode entity.
+"""
+type AlarmConfiguration {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  alarmNodes(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [ProfileNodeSortInput!]
+    where: ProfileNodeFilterInput
+  ): AlarmNodesConnection
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: ID!
+  recorder: Recorder!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """
+  Alarm configuration settings (parameters that are currently chosen by client).
+  """
+  settings: AlarmConfigurationSettings!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """
+  Alarm configuration status (parameters that can be modified outside by client).
+  """
+  status: AlarmConfigurationStatus!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the alarm configuration creation."""
+input AlarmConfigurationCreateInput {
+  """List of the action identifiers that can be applied to the alarm."""
+  actionIds: [String!]!
+  """Identifier of the alarm trigger."""
+  alarmTriggerId: String!
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """
+  Identifier of the end alarm trigger (if the identifier is empty, then it is not used).
+  """
+  endAlarmTriggerId: String!
+  """Resource display name which is visible for user."""
+  name: String!
+  """Alarm priority."""
+  priority: AlarmPriority!
+  """Identifier of parent recorder."""
+  recorderId: String!
+  """Alarm schedule."""
+  schedule: String!
+}
+
+"""Alarm configuration resource definition."""
+input AlarmConfigurationFilterInput {
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  and: [AlarmConfigurationFilterInput!]
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  or: [AlarmConfigurationFilterInput!]
+  """Identifier of the parent recorder."""
+  recorderId: StringOperationFilterInput
+  """
+  Alarm configuration settings (parameters that are currently chosen by client).
+  """
+  settings: AlarmConfigurationSettingsFilterInput
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """
+  Alarm configuration status (parameters that can be modified outside by client).
+  """
+  status: AlarmConfigurationStatusFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+}
+
+"""Alarm configuration settings definition."""
+type AlarmConfigurationSettings {
+  """List of the action identifiers that can be applied to the alarm."""
+  actionIds: [String!]!
+  alarmActions(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [AlarmActionSortInput!]
+    where: AlarmActionFilterInput
+  ): AlarmActionsConnection
+  alarmTrigger: IAlarmTrigger
+  """Identifier of the alarm trigger."""
+  alarmTriggerId: String!
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  endAlarmTrigger: IAlarmTrigger
+  """
+  Identifier of the end alarm trigger (if the identifier is empty, then it is not used).
+  """
+  endAlarmTriggerId: String!
+  """Resource display name which is visible for user."""
+  name: String!
+  """Alarm priority."""
+  priority: AlarmPriority!
+  """Alarm schedule."""
+  schedule: String!
+}
+
+"""Alarm configuration settings definition."""
+input AlarmConfigurationSettingsFilterInput {
+  """List of the action identifiers that can be applied to the alarm."""
+  actionIds: ListStringOperationFilterInput
+  """Identifier of the alarm trigger."""
+  alarmTriggerId: StringOperationFilterInput
+  and: [AlarmConfigurationSettingsFilterInput!]
+  """Resource custom description which is visible for user, optional."""
+  description: StringOperationFilterInput
+  """Is resource enabled or disabled."""
+  enabled: BooleanOperationFilterInput
+  """
+  Identifier of the end alarm trigger (if the identifier is empty, then it is not used).
+  """
+  endAlarmTriggerId: StringOperationFilterInput
+  """Resource display name which is visible for user."""
+  name: StringOperationFilterInput
+  or: [AlarmConfigurationSettingsFilterInput!]
+  """Alarm priority."""
+  priority: AlarmPriorityOperationFilterInput
+  """Alarm schedule."""
+  schedule: StringOperationFilterInput
+}
+
+"""Alarm configuration settings definition."""
+input AlarmConfigurationSettingsSortInput {
+  """Identifier of the alarm trigger."""
+  alarmTriggerId: SortEnumType
+  """Resource custom description which is visible for user, optional."""
+  description: SortEnumType
+  """Is resource enabled or disabled."""
+  enabled: SortEnumType
+  """
+  Identifier of the end alarm trigger (if the identifier is empty, then it is not used).
+  """
+  endAlarmTriggerId: SortEnumType
+  """Resource display name which is visible for user."""
+  name: SortEnumType
+  """Alarm priority."""
+  priority: SortEnumType
+  """Alarm schedule."""
+  schedule: SortEnumType
+}
+
+"""Alarm configuration resource definition."""
+input AlarmConfigurationSortInput {
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """Identifier of the parent recorder."""
+  recorderId: SortEnumType
+  """
+  Alarm configuration settings (parameters that are currently chosen by client).
+  """
+  settings: AlarmConfigurationSettingsSortInput
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """
+  Alarm configuration status (parameters that can be modified outside by client).
+  """
+  status: AlarmConfigurationStatusSortInput
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+}
+
+"""Alarm configuration status definition."""
+type AlarmConfigurationStatus {
+  """The adding condition of the alarm configuration."""
+  added: Condition!
+  """
+  The configuration condition of the alarm configuration when it is archived (saved for existing alarms).
+  """
+  archived: Condition!
+}
+
+"""Alarm configuration status definition."""
+input AlarmConfigurationStatusFilterInput {
+  """The adding condition of the alarm configuration."""
+  added: ConditionFilterInput
+  and: [AlarmConfigurationStatusFilterInput!]
+  """
+  The configuration condition of the alarm configuration when it is archived (saved for existing alarms).
+  """
+  archived: ConditionFilterInput
+  or: [AlarmConfigurationStatusFilterInput!]
+}
+
+"""Alarm configuration status definition."""
+input AlarmConfigurationStatusSortInput {
+  """The adding condition of the alarm configuration."""
+  added: ConditionSortInput
+  """
+  The configuration condition of the alarm configuration when it is archived (saved for existing alarms).
+  """
+  archived: ConditionSortInput
+}
+
+"""The data type for the alarm configuration update."""
+input AlarmConfigurationUpdateInput {
+  """List of the action identifiers that can be applied to the alarm."""
+  actionIds: [String!]
+  """Identifier of the alarm trigger."""
+  alarmTriggerId: String
+  """Resource custom description which is visible for user, optional."""
+  description: String
+  """Is resource enabled or disabled."""
+  enabled: Boolean
+  """Identifier of the end alarm trigger."""
+  endAlarmTriggerId: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Resource display name which is visible for user."""
+  name: String
+  """Alarm priority."""
+  priority: AlarmPriority
+  """Alarm schedule."""
+  schedule: String
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the alarm creation."""
+input AlarmCreateInput {
+  """Identifier of the alarm configuration."""
+  alarmConfigurationId: String!
+  """Timestamp of when the alarm stopped."""
+  endTime: DateTime
+  """Timestamp of when the alarm started."""
+  startTime: DateTime!
+}
+
+"""Alarm resource definition."""
+input AlarmFilterInput {
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  """Identifier of the alarm configuration."""
+  alarmConfigurationId: StringOperationFilterInput
+  and: [AlarmFilterInput!]
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Timestamp of when the alarm stopped."""
+  endTime: DateTimeOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  or: [AlarmFilterInput!]
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """Timestamp of when the alarm started."""
+  startTime: DateTimeOperationFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+}
+
+"""Alarm profile node resource definition."""
+type AlarmNode implements IProfileNode {
+  """Indicates if acknowledgment is allowed."""
+  acknowledgeAllowed: Boolean!
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  alarmConfiguration: AlarmConfiguration!
+  """Identifier of the related alarm configuration."""
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  """Indicates if export of alarm is allowed."""
+  exportAllowed: Boolean!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node type."""
+  kind: String!
+  """Profile node name which is visible for user."""
+  name: String!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates if playback is allowed."""
+  playbackAllowed: Boolean!
+  profile: Profile!
+  """Profile node profile identifier."""
+  profileId: String!
+  """Indicates if realtime alarm is allowed."""
+  realtimeAllowed: Boolean!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the alarm profile node creation."""
+input AlarmNodeCreateInput {
+  """Indicates if acknowledgment is allowed."""
+  acknowledgeAllowed: Boolean!
+  """Identifier of the related alarm configuration."""
+  componentId: String!
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  """Indicates if export of alarm is allowed."""
+  exportAllowed: Boolean!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Profile node name which is visible for user."""
+  name: String!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates if playback is allowed."""
+  playbackAllowed: Boolean!
+  """Profile node profile identifier."""
+  profileId: String!
+  """Indicates if realtime alarm is allowed."""
+  realtimeAllowed: Boolean!
+}
+
+input AlarmNodeUpdateInput {
+  """Indicates if acknowledgment is allowed."""
+  acknowledgeAllowed: Boolean
+  """Profile node description which is visible for user, optional."""
+  description: String
+  """Indicates if export of alarm is allowed."""
+  exportAllowed: Boolean
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node name which is visible for user."""
+  name: String
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates if playback is allowed."""
+  playbackAllowed: Boolean
+  """Indicates if realtime alarm is allowed."""
+  realtimeAllowed: Boolean
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""A connection to a list of items."""
+type AlarmNodesConnection {
+  """A list of edges."""
+  edges: [AlarmNodesEdge!]
+  """A flattened list of the nodes."""
+  nodes: [AlarmNode]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type AlarmNodesEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: AlarmNode
+}
+
+"""The priority of the alarm."""
+enum AlarmPriority {
+  HIGH
+  LOW
+  NORMAL
+}
+
+input AlarmPriorityOperationFilterInput {
+  eq: AlarmPriority
+  in: [AlarmPriority!]
+  neq: AlarmPriority
+  nin: [AlarmPriority!]
+}
+
+"""Alarm resource definition."""
+input AlarmSortInput {
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """Identifier of the alarm configuration."""
+  alarmConfigurationId: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Timestamp of when the alarm stopped."""
+  endTime: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """Timestamp of when the alarm started."""
+  startTime: SortEnumType
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+}
+
+"""Alarm trigger resource definition."""
+input AlarmTriggerFilterInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: BooleanOperationFilterInput
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  and: [AlarmTriggerFilterInput!]
+  """
+  Identifier of the related source component (digital input, video channel, etc.).
+  """
+  componentId: StringOperationFilterInput
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Unique event number for legacy recorders."""
+  eventNumber: IntOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  """Alarm trigger type."""
+  kind: StringOperationFilterInput
+  or: [AlarmTriggerFilterInput!]
+  """Identifier of the parent recorder."""
+  recorderId: StringOperationFilterInput
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: IntOperationFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+}
+
+"""Alarm trigger resource definition."""
+input AlarmTriggerSortInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: SortEnumType
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """
+  Identifier of the related source component (digital input, video channel, etc.).
+  """
+  componentId: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Unique event number for legacy recorders."""
+  eventNumber: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """Alarm trigger type."""
+  kind: SortEnumType
+  """Identifier of the parent recorder."""
+  recorderId: SortEnumType
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: SortEnumType
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+}
+
+"""The data type for the alarm update."""
+input AlarmUpdateInput {
+  """Timestamp of when the alarm stopped."""
+  endTime: DateTime
+  """Identifier of the entity to update."""
+  id: String!
+  """Timestamp of when the alarm started."""
+  startTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Defines when a policy shall be executed."""
+enum ApplyPolicy {
+  """After the resolver was executed."""
+  AFTER_RESOLVER
+  """Before the resolver was executed."""
+  BEFORE_RESOLVER
+  """The policy is applied in the validation step before the execution."""
+  VALIDATION
+}
+
+"""Audio alarm trigger resource definition."""
+type AudioAlarmTrigger implements IAlarmTrigger {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related source component (digital input, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique event number for legacy recorders."""
+  eventNumber: Int!
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """Audio alarm trigger operation."""
+  operation: AudioAlarmTriggerOperation!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the audio alarm trigger creation."""
+input AudioAlarmTriggerCreateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """Identifier of the related audio channel."""
+  componentId: String!
+  """Audio alarm trigger operation."""
+  operation: AudioAlarmTriggerOperation!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+}
+
+"""The type of the audio alarm trigger operation."""
+enum AudioAlarmTriggerOperation {
+  HIGH
+  LOW
+}
+
+"""The data type for the audio alarm trigger update."""
+input AudioAlarmTriggerUpdateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean
+  """Identifier of the entity to update."""
+  id: String!
+  """Audio alarm trigger operation."""
+  operation: AudioAlarmTriggerOperation
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Audio recording alarm action resource definition."""
+type AudioRecordingAlarmAction implements IAlarmAction {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """Number of seconds for post-recording (0 - post-recording is disabled)."""
+  postRecordingSeconds: Int!
+  """Number of seconds for pre-recording (0 - pre-recording is disabled)."""
+  preRecordingSeconds: Int!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """Number of seconds to record."""
+  recordingSeconds: Int!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the audio recording alarm action creation."""
+input AudioRecordingAlarmActionCreateInput {
+  """Identifier of the related audio channel."""
+  componentId: String!
+  """Number of seconds for post-recording (0 - post-recording is disabled)."""
+  postRecordingSeconds: Int!
+  """Number of seconds for pre-recording (0 - pre-recording is disabled)."""
+  preRecordingSeconds: Int!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """Number of seconds to record."""
+  recordingSeconds: Int!
+}
+
+"""The data type for the audio recording alarm action update."""
+input AudioRecordingAlarmActionUpdateInput {
+  """Identifier of the entity to update."""
+  id: String!
+  """Number of seconds for post-recording (0 - post-recording is disabled)."""
+  postRecordingSeconds: Int
+  """Number of seconds for pre-recording (0 - pre-recording is disabled)."""
+  preRecordingSeconds: Int
+  """Number of seconds to record."""
+  recordingSeconds: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+type AuditEventDataOfStringAndString {
+  action: String!
+  dataObjects: [String!]!
+  failedObjectIds: [String!]!
+  failedObjects: [String!]!
+  kind: String!
+  patchObjects: [String!]!
+  status: AuditOperationStatus!
+}
+
+input AuditEventDataOfStringAndStringFilterInput {
+  action: StringOperationFilterInput
+  and: [AuditEventDataOfStringAndStringFilterInput!]
+  dataObjects: ListStringOperationFilterInput
+  failedObjectIds: ListStringOperationFilterInput
+  failedObjects: ListStringOperationFilterInput
+  kind: StringOperationFilterInput
+  or: [AuditEventDataOfStringAndStringFilterInput!]
+  patchObjects: ListStringOperationFilterInput
+  status: AuditOperationStatusOperationFilterInput
+}
+
+input AuditEventDataOfStringAndStringSortInput {
+  action: SortEnumType
+  kind: SortEnumType
+  status: SortEnumType
+}
+
+"""The enumeration of audit operation statuses."""
+enum AuditOperationStatus {
+  FAILED
+  PARTIALLY_SUCCESS
+  SUCCESS
+}
+
+input AuditOperationStatusOperationFilterInput {
+  eq: AuditOperationStatus
+  in: [AuditOperationStatus!]
+  neq: AuditOperationStatus
+  nin: [AuditOperationStatus!]
+}
+
+type AuditRecord {
+  """Causation event identifier."""
+  causationId: String!
+  """Correlation event identifier."""
+  correlationId: String!
+  data: AuditEventDataOfStringAndString!
+  """Event unique identifier."""
+  eventId: String!
+  id: String!
+  """Event name."""
+  name: String!
+  """Identifies the context in which an event happened."""
+  source: String!
+  """The version of the specification which the event uses."""
+  specVersion: String!
+  """
+  Describes the subject of the event in the context of the event producer (identified by source).
+  """
+  subject: String!
+  """Timestamp of when the occurrence happened. Must adhere to RFC 3339."""
+  time: DateTime!
+  """User identifier."""
+  user: String!
+}
+
+input AuditRecordFilterInput {
+  and: [AuditRecordFilterInput!]
+  """Causation event identifier."""
+  causationId: StringOperationFilterInput
+  """Correlation event identifier."""
+  correlationId: StringOperationFilterInput
+  data: AuditEventDataOfStringAndStringFilterInput
+  """Event unique identifier."""
+  eventId: StringOperationFilterInput
+  id: StringOperationFilterInput
+  """Event name."""
+  name: StringOperationFilterInput
+  or: [AuditRecordFilterInput!]
+  """Identifies the context in which an event happened."""
+  source: StringOperationFilterInput
+  """The version of the specification which the event uses."""
+  specVersion: StringOperationFilterInput
+  """
+  Describes the subject of the event in the context of the event producer (identified by source).
+  """
+  subject: StringOperationFilterInput
+  """Timestamp of when the occurrence happened. Must adhere to RFC 3339."""
+  time: DateTimeOperationFilterInput
+  """User identifier."""
+  user: StringOperationFilterInput
+}
+
+input AuditRecordSortInput {
+  """Causation event identifier."""
+  causationId: SortEnumType
+  """Correlation event identifier."""
+  correlationId: SortEnumType
+  data: AuditEventDataOfStringAndStringSortInput
+  """Event unique identifier."""
+  eventId: SortEnumType
+  id: SortEnumType
+  """Event name."""
+  name: SortEnumType
+  """Identifies the context in which an event happened."""
+  source: SortEnumType
+  """The version of the specification which the event uses."""
+  specVersion: SortEnumType
+  """
+  Describes the subject of the event in the context of the event producer (identified by source).
+  """
+  subject: SortEnumType
+  """Timestamp of when the occurrence happened. Must adhere to RFC 3339."""
+  time: SortEnumType
+  """User identifier."""
+  user: SortEnumType
+}
+
+"""Enumeration of the stream bitrate modes."""
+enum BitrateMode {
+  CBR
+  VBR
+  VBR_MAX
+}
+
+input BitrateModeOperationFilterInput {
+  eq: BitrateMode
+  in: [BitrateMode!]
+  neq: BitrateMode
+  nin: [BitrateMode!]
+}
+
+input BooleanOperationFilterInput {
+  eq: Boolean
+  neq: Boolean
+}
+
+"""Enumeration of the video stream compression formats."""
+enum Compression {
+  H264
+  H265
+  JPEG
+  MPEG4
+  MXPEG
+  UNDEFINED
+  WMV
+}
+
+input CompressionOperationFilterInput {
+  eq: Compression
+  in: [Compression!]
+  neq: Compression
+  nin: [Compression!]
+}
+
+"""Generic type to store condition."""
+type Condition {
+  """Last time the condition transitioned from one status to another."""
+  lastTransitionTime: DateTime
+  """Human readable message indicating details about the transition."""
+  message: String!
+  """Status of the condition, one of Unknown, True, False."""
+  status: ConditionStatus!
+}
+
+"""Generic type to store condition."""
+input ConditionFilterInput {
+  and: [ConditionFilterInput!]
+  """Last time the condition transitioned from one status to another."""
+  lastTransitionTime: DateTimeOperationFilterInput
+  """Human readable message indicating details about the transition."""
+  message: StringOperationFilterInput
+  or: [ConditionFilterInput!]
+  """Status of the condition, one of Unknown, True, False."""
+  status: ConditionStatusOperationFilterInput
+}
+
+"""Generic type to store condition."""
+input ConditionSortInput {
+  """Last time the condition transitioned from one status to another."""
+  lastTransitionTime: SortEnumType
+  """Human readable message indicating details about the transition."""
+  message: SortEnumType
+  """Status of the condition, one of Unknown, True, False."""
+  status: SortEnumType
+}
+
+"""Enumeration of condition statuses."""
+enum ConditionStatus {
+  FALSE
+  TRUE
+  UNKNOWN
+}
+
+input ConditionStatusOperationFilterInput {
+  eq: ConditionStatus
+  in: [ConditionStatus!]
+  neq: ConditionStatus
+  nin: [ConditionStatus!]
+}
+
+"""Stream control mode."""
+enum ControlMode {
+  ACTIVE
+  PASSIVE
+}
+
+input ControlModeOperationFilterInput {
+  eq: ControlMode
+  in: [ControlMode!]
+  neq: ControlMode
+  nin: [ControlMode!]
+}
+
+"""The `DateTime` scalar represents an ISO-8601 compliant date time type."""
+scalar DateTime
+
+input DateTimeOperationFilterInput {
+  eq: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime]
+  lt: DateTime
+  lte: DateTime
+  neq: DateTime
+  ngt: DateTime
+  ngte: DateTime
+  nin: [DateTime]
+  nlt: DateTime
+  nlte: DateTime
+}
+
+"""
+Template for a Device entity that is used with relation to the DigitalSource entity.
+"""
+type Device {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  digitalSources(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [DigitalSourceSortInput!]
+    where: DigitalSourceFilterInput
+  ): DigitalSourcesConnection
+  """Driver version number."""
+  driverVersion: String!
+  """Unique identifier of the resource object (GUID string)."""
+  id: ID!
+  recorder: Recorder!
+  """Identifier of parent recorder."""
+  recorderId: String!
+  """Device settings."""
+  settings: DeviceSettings!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Device status."""
+  status: DeviceStatus!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannels(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [VideoChannelSortInput!]
+    where: VideoChannelFilterInput
+  ): VideoChannelsConnection
+  videoStreams(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [VideoStreamSortInput!]
+    where: VideoStreamFilterInput
+  ): VideoStreamsConnection
+}
+
+"""The data type for the device creation."""
+input DeviceCreateInput {
+  """
+  Network address to connect to the device (host IP address or DNS name).
+  """
+  address: String!
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Driver name which is used to communicate."""
+  driverName: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Resource display name which is visible for user."""
+  name: String!
+  """Password to the device access."""
+  password: String!
+  """Network port to connect to the device."""
+  port: Int!
+  """Identifier of parent recorder."""
+  recorderId: String!
+  """User name to the device access."""
+  userName: String!
+}
+
+"""Device resource definition."""
+input DeviceFilterInput {
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  and: [DeviceFilterInput!]
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Driver version number."""
+  driverVersion: StringOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  or: [DeviceFilterInput!]
+  """Identifier of parent recorder."""
+  recorderId: StringOperationFilterInput
+  """Device settings."""
+  settings: DeviceSettingsFilterInput
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """Device status."""
+  status: DeviceStatusFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+}
+
+"""Device settings definition."""
+type DeviceSettings {
+  """
+  Network address to connect to the device (host IP address or DNS name).
+  """
+  address: String!
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Driver name which is used to communicate."""
+  driverName: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Resource display name which is visible for user."""
+  name: String!
+  """Password to the device access."""
+  password: String!
+  """Network port to connect to the device."""
+  port: Int!
+  """User name to the device access."""
+  userName: String!
+}
+
+"""Device settings definition."""
+input DeviceSettingsFilterInput {
+  """
+  Network address to connect to the device (host IP address or DNS name).
+  """
+  address: StringOperationFilterInput
+  and: [DeviceSettingsFilterInput!]
+  """Resource custom description which is visible for user, optional."""
+  description: StringOperationFilterInput
+  """Driver name which is used to communicate."""
+  driverName: StringOperationFilterInput
+  """Is resource enabled or disabled."""
+  enabled: BooleanOperationFilterInput
+  """Resource display name which is visible for user."""
+  name: StringOperationFilterInput
+  or: [DeviceSettingsFilterInput!]
+  """Password to the device access."""
+  password: StringOperationFilterInput
+  """Network port to connect to the device."""
+  port: IntOperationFilterInput
+  """User name to the device access."""
+  userName: StringOperationFilterInput
+}
+
+"""Device settings definition."""
+input DeviceSettingsSortInput {
+  """
+  Network address to connect to the device (host IP address or DNS name).
+  """
+  address: SortEnumType
+  """Resource custom description which is visible for user, optional."""
+  description: SortEnumType
+  """Driver name which is used to communicate."""
+  driverName: SortEnumType
+  """Is resource enabled or disabled."""
+  enabled: SortEnumType
+  """Resource display name which is visible for user."""
+  name: SortEnumType
+  """Password to the device access."""
+  password: SortEnumType
+  """Network port to connect to the device."""
+  port: SortEnumType
+  """User name to the device access."""
+  userName: SortEnumType
+}
+
+"""Device resource definition."""
+input DeviceSortInput {
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Driver version number."""
+  driverVersion: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """Identifier of parent recorder."""
+  recorderId: SortEnumType
+  """Device settings."""
+  settings: DeviceSettingsSortInput
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """Device status."""
+  status: DeviceStatusSortInput
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+}
+
+"""Device status definition."""
+type DeviceStatus {
+  """The adding condition of the device."""
+  added: Condition!
+  """The capabilities fetching condition of the device."""
+  capabilitiesReceived: Condition!
+  """The configuration condition of the device."""
+  configured: Condition!
+  """The connection condition of the device."""
+  connected: Condition!
+}
+
+"""Device status definition."""
+input DeviceStatusFilterInput {
+  """The adding condition of the device."""
+  added: ConditionFilterInput
+  and: [DeviceStatusFilterInput!]
+  """The capabilities fetching condition of the device."""
+  capabilitiesReceived: ConditionFilterInput
+  """The configuration condition of the device."""
+  configured: ConditionFilterInput
+  """The connection condition of the device."""
+  connected: ConditionFilterInput
+  or: [DeviceStatusFilterInput!]
+}
+
+"""Device status definition."""
+input DeviceStatusSortInput {
+  """The adding condition of the device."""
+  added: ConditionSortInput
+  """The capabilities fetching condition of the device."""
+  capabilitiesReceived: ConditionSortInput
+  """The configuration condition of the device."""
+  configured: ConditionSortInput
+  """The connection condition of the device."""
+  connected: ConditionSortInput
+}
+
+input DeviceUpdateInput {
+  """
+  Network address to connect to the device (host IP address or DNS name).
+  """
+  address: String
+  """Resource custom description which is visible for user, optional."""
+  description: String
+  """Driver name which is used to communicate."""
+  driverName: String
+  """Is resource enabled or disabled."""
+  enabled: Boolean
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Resource display name which is visible for user."""
+  name: String
+  """Password to the device access."""
+  password: String
+  """Network port to connect to the device."""
+  port: Int
+  """User name to the device access."""
+  userName: String
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""A connection to a list of items."""
+type DevicesConnection {
+  """A list of edges."""
+  edges: [DevicesEdge!]
+  """A flattened list of the nodes."""
+  nodes: [Device]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type DevicesEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: Device
+}
+
+"""Digital input alarm trigger resource definition."""
+type DigitalInputAlarmTrigger implements IAlarmTrigger {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related source component (digital input, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  digitalSource: DigitalSource!
+  """Unique event number for legacy recorders."""
+  eventNumber: Int!
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  recorder: Recorder!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the digital input alarm trigger creation."""
+input DigitalInputAlarmTriggerCreateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """Identifier of the related digital source (input)."""
+  componentId: String!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+}
+
+"""The data type for the digital input alarm trigger update."""
+input DigitalInputAlarmTriggerUpdateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean
+  """Identifier of the entity to update."""
+  id: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Digital input profile node resource definition."""
+type DigitalInputNode implements IProfileNode {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """Identifier of the related alarm configuration."""
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  digitalSource: DigitalSource!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node type."""
+  kind: String!
+  """Profile node name which is visible for user."""
+  name: String!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates the primary action for the digital input node."""
+  primaryAction: PrimaryAction!
+  profile: Profile!
+  """Profile node profile identifier."""
+  profileId: String!
+  """Number of the shortcut."""
+  shortcutNumber: Int!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the digital input profile node creation."""
+input DigitalInputNodeCreateInput {
+  """Identifier of the related digital input node."""
+  componentId: String!
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Profile node name which is visible for user."""
+  name: String!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates the primary action for the digital input node."""
+  primaryAction: PrimaryAction!
+  """Profile node profile identifier."""
+  profileId: String!
+  """Number of the shortcut."""
+  shortcutNumber: Int!
+}
+
+input DigitalInputNodeUpdateInput {
+  """Profile node description which is visible for user, optional."""
+  description: String
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node name which is visible for user."""
+  name: String
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates the primary action for the digital input node."""
+  primaryAction: PrimaryAction
+  """Number of the shortcut."""
+  shortcutNumber: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""A connection to a list of items."""
+type DigitalInputNodesConnection {
+  """A list of edges."""
+  edges: [DigitalInputNodesEdge!]
+  """A flattened list of the nodes."""
+  nodes: [DigitalInputNode]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type DigitalInputNodesEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: DigitalInputNode
+}
+
+"""Digital output alarm action resource definition."""
+type DigitalOutputAlarmAction implements IAlarmAction {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: String!
+  """
+  Number of seconds to delay output deactivation (0 - deactivate output when alarm was ended, N - deactivate output N seconds after alarm was ended).
+  """
+  deactivateDelaySeconds: Int!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  digitalSource: DigitalSource!
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  recorder: Recorder!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the digital output alarm action creation."""
+input DigitalOutputAlarmActionCreateInput {
+  """Identifier of the related digital source (output)."""
+  componentId: String!
+  """
+  Number of seconds to delay output deactivation (0 - deactivate output when alarm was ended, N - deactivate output N seconds after alarm was ended).
+  """
+  deactivateDelaySeconds: Int!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+}
+
+"""The data type for the digital output alarm action update."""
+input DigitalOutputAlarmActionUpdateInput {
+  """
+  Number of seconds to delay output deactivation (0 - deactivate output when alarm was ended, N - deactivate output N seconds after alarm was ended).
+  """
+  deactivateDelaySeconds: Int
+  """Identifier of the entity to update."""
+  id: String!
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Digital output profile node resource definition."""
+type DigitalOutputNode implements IProfileNode {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """Identifier of the related alarm configuration."""
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  digitalSource: DigitalSource!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node type."""
+  kind: String!
+  """Profile node name which is visible for user."""
+  name: String!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates the primary action for the digital output node."""
+  primaryAction: PrimaryAction!
+  profile: Profile!
+  """Profile node profile identifier."""
+  profileId: String!
+  """Indicated the pulse value."""
+  pulseTime: DateTime
+  """Number of the shortcut."""
+  shortcutNumber: Int!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the digital output profile node creation."""
+input DigitalOutputNodeCreateInput {
+  """Identifier of the related digital output node."""
+  componentId: String!
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Profile node name which is visible for user."""
+  name: String!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates the primary action for the digital output node."""
+  primaryAction: PrimaryAction!
+  """Profile node profile identifier."""
+  profileId: String!
+  """Indicated the pulse value."""
+  pulseTime: DateTime
+  """Number of the shortcut."""
+  shortcutNumber: Int!
+}
+
+input DigitalOutputNodeUpdateInput {
+  """Profile node description which is visible for user, optional."""
+  description: String
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node name which is visible for user."""
+  name: String
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates the primary action for the digital output node."""
+  primaryAction: PrimaryAction
+  """Indicated the pulse value."""
+  pulseTime: DateTime
+  """Number of the shortcut."""
+  shortcutNumber: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""A connection to a list of items."""
+type DigitalOutputNodesConnection {
+  """A list of edges."""
+  edges: [DigitalOutputNodesEdge!]
+  """A flattened list of the nodes."""
+  nodes: [DigitalOutputNode]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type DigitalOutputNodesEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: DigitalOutputNode
+}
+
+"""
+Template for a DigitalSource entity that is used with relation to the DigitalInputNode and DigitalOutputNode entiies.
+"""
+type DigitalSource {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  device: Device!
+  """Identifier of parent device."""
+  deviceId: String!
+  digitalInputNodes(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [ProfileNodeSortInput!]
+    where: ProfileNodeFilterInput
+  ): DigitalInputNodesConnection
+  digitalOutputNodes(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [ProfileNodeSortInput!]
+    where: ProfileNodeFilterInput
+  ): DigitalOutputNodesConnection
+  """Unique identifier of the resource object (GUID string)."""
+  id: ID!
+  recorder: Recorder!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """
+  Digital source settings (parameters that are currently chosen by client).
+  """
+  settings: DigitalSourceSettings!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """
+  Digital source status (parameters that can be modified outside by client).
+  """
+  status: DigitalSourceStatus!
+  """Indicates digital source type (input/output)."""
+  type: DigitalSourceType!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the digital source creation."""
+input DigitalSourceCreateInput {
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Identifier of parent device."""
+  deviceId: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Resource display name which is visible for user."""
+  name: String!
+  """The digital source polarity (opened or closed)."""
+  polarity: DigitalSourcePolarity!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """Indicates digital source type (input/output)."""
+  type: DigitalSourceType!
+}
+
+"""Digital source resource definition."""
+input DigitalSourceFilterInput {
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  and: [DigitalSourceFilterInput!]
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Identifier of parent device."""
+  deviceId: StringOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  or: [DigitalSourceFilterInput!]
+  """Identifier of the parent recorder."""
+  recorderId: StringOperationFilterInput
+  """
+  Digital source settings (parameters that are currently chosen by client).
+  """
+  settings: DigitalSourceSettingsFilterInput
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """
+  Digital source status (parameters that can be modified outside by client).
+  """
+  status: DigitalSourceStatusFilterInput
+  """Indicates digital source type (input/output)."""
+  type: DigitalSourceTypeOperationFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+}
+
+"""The enumeration for the digital source polarity."""
+enum DigitalSourcePolarity {
+  CLOSED
+  OPENED
+}
+
+input DigitalSourcePolarityOperationFilterInput {
+  eq: DigitalSourcePolarity
+  in: [DigitalSourcePolarity!]
+  neq: DigitalSourcePolarity
+  nin: [DigitalSourcePolarity!]
+}
+
+"""Digital source settings definition."""
+type DigitalSourceSettings {
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Resource display name which is visible for user."""
+  name: String!
+  """The digital source polarity (opened or closed)."""
+  polarity: DigitalSourcePolarity!
+}
+
+"""Digital source settings definition."""
+input DigitalSourceSettingsFilterInput {
+  and: [DigitalSourceSettingsFilterInput!]
+  """Resource custom description which is visible for user, optional."""
+  description: StringOperationFilterInput
+  """Is resource enabled or disabled."""
+  enabled: BooleanOperationFilterInput
+  """Resource display name which is visible for user."""
+  name: StringOperationFilterInput
+  or: [DigitalSourceSettingsFilterInput!]
+  """The digital source polarity (opened or closed)."""
+  polarity: DigitalSourcePolarityOperationFilterInput
+}
+
+"""Digital source settings definition."""
+input DigitalSourceSettingsSortInput {
+  """Resource custom description which is visible for user, optional."""
+  description: SortEnumType
+  """Is resource enabled or disabled."""
+  enabled: SortEnumType
+  """Resource display name which is visible for user."""
+  name: SortEnumType
+  """The digital source polarity (opened or closed)."""
+  polarity: SortEnumType
+}
+
+"""Digital source resource definition."""
+input DigitalSourceSortInput {
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Identifier of parent device."""
+  deviceId: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """Identifier of the parent recorder."""
+  recorderId: SortEnumType
+  """
+  Digital source settings (parameters that are currently chosen by client).
+  """
+  settings: DigitalSourceSettingsSortInput
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """
+  Digital source status (parameters that can be modified outside by client).
+  """
+  status: DigitalSourceStatusSortInput
+  """Indicates digital source type (input/output)."""
+  type: SortEnumType
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+}
+
+"""The enumeration for the digital source state."""
+enum DigitalSourceState {
+  CLOSED
+  OPEN
+  UNKNOWN
+}
+
+input DigitalSourceStateOperationFilterInput {
+  eq: DigitalSourceState
+  in: [DigitalSourceState!]
+  neq: DigitalSourceState
+  nin: [DigitalSourceState!]
+}
+
+"""Digital source status definition."""
+type DigitalSourceStatus {
+  """The configuration condition of the digital source."""
+  configured: Condition!
+  """The connection condition of the digital source."""
+  connected: Condition!
+  """The current state of the digital source."""
+  deviceState: DigitalSourceState!
+}
+
+"""Digital source status definition."""
+input DigitalSourceStatusFilterInput {
+  and: [DigitalSourceStatusFilterInput!]
+  """The configuration condition of the digital source."""
+  configured: ConditionFilterInput
+  """The connection condition of the digital source."""
+  connected: ConditionFilterInput
+  """The current state of the digital source."""
+  deviceState: DigitalSourceStateOperationFilterInput
+  or: [DigitalSourceStatusFilterInput!]
+}
+
+"""Digital source status definition."""
+input DigitalSourceStatusSortInput {
+  """The configuration condition of the digital source."""
+  configured: ConditionSortInput
+  """The connection condition of the digital source."""
+  connected: ConditionSortInput
+  """The current state of the digital source."""
+  deviceState: SortEnumType
+}
+
+"""The enumeration for the digital source type."""
+enum DigitalSourceType {
+  INPUT
+  OUTPUT
+}
+
+input DigitalSourceTypeOperationFilterInput {
+  eq: DigitalSourceType
+  in: [DigitalSourceType!]
+  neq: DigitalSourceType
+  nin: [DigitalSourceType!]
+}
+
+input DigitalSourceUpdateInput {
+  """Resource custom description which is visible for user, optional."""
+  description: String
+  """Is resource enabled or disabled."""
+  enabled: Boolean
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Resource display name which is visible for user."""
+  name: String
+  polarity: DigitalSourcePolarity
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""A connection to a list of items."""
+type DigitalSourcesConnection {
+  """A list of edges."""
+  edges: [DigitalSourcesEdge!]
+  """A flattened list of the nodes."""
+  nodes: [DigitalSource]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type DigitalSourcesEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: DigitalSource
+}
+
+"""Disable alarms alarm action resource definition."""
+type DisableAlarmsAlarmAction implements IAlarmAction {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """Priority level for alarms disabling."""
+  priority: AlarmPriority!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the disable alarms alarm action creation."""
+input DisableAlarmsAlarmActionCreateInput {
+  """Priority level for alarms disabling."""
+  priority: AlarmPriority!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+}
+
+"""The data type for the disable alarms alarm action update."""
+input DisableAlarmsAlarmActionUpdateInput {
+  """Identifier of the entity to update."""
+  id: String!
+  """Priority level for alarms disabling."""
+  priority: AlarmPriority
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Disable client zones alarm action resource definition."""
+type DisableClientZonesAlarmAction implements IAlarmAction {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  recorder: Recorder!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannel: VideoChannel!
+  """The client zone type."""
+  zoneType: DisableClientZonesAlarmType!
+}
+
+"""The data type for the disable client zones alarm action creation."""
+input DisableClientZonesAlarmActionCreateInput {
+  """Identifier of the related video channel."""
+  componentId: String!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The client zone type."""
+  zoneType: DisableClientZonesAlarmType!
+}
+
+"""The data type for the disable client zones alarm action update."""
+input DisableClientZonesAlarmActionUpdateInput {
+  """Identifier of the entity to update."""
+  id: String!
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  """The client zone type."""
+  zoneType: DisableClientZonesAlarmType
+}
+
+"""Enumeration of the client zone types."""
+enum DisableClientZonesAlarmType {
+  BLURRING
+  PRIVACY_MASK
+}
+
+"""Email alarm action resource definition."""
+type EmailAlarmAction implements IAlarmAction {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """Number of seconds after alarm for attaching images."""
+  afterAlarmSeconds: Int!
+  """Number of seconds before alarm for attaching images."""
+  beforeAlarmSeconds: Int!
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Attached image size limit."""
+  imageSizeLimit: EmailAlarmActionImageSizeLimit!
+  """Attach or not images to email."""
+  isImageAttached: Boolean!
+  """Use long format for the email."""
+  isLongFormat: Boolean!
+  """Alarm trigger type."""
+  kind: String!
+  """Email message."""
+  message: String!
+  """Number of images to attach to email."""
+  numberOfImages: Int!
+  recorder: Recorder!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannel: VideoChannel!
+}
+
+"""The data type for the email alarm action creation."""
+input EmailAlarmActionCreateInput {
+  """Number of seconds after alarm for attaching images."""
+  afterAlarmSeconds: Int!
+  """Number of seconds before alarm for attaching images."""
+  beforeAlarmSeconds: Int!
+  """Identifier of the related video channel (if images are attached)."""
+  componentId: String
+  """Attached image size limit."""
+  imageSizeLimit: EmailAlarmActionImageSizeLimit!
+  """Attach or not images to email."""
+  isImageAttached: Boolean!
+  """Use long format for the email."""
+  isLongFormat: Boolean!
+  """Email message."""
+  message: String!
+  """Number of images to attach to email."""
+  numberOfImages: Int!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+}
+
+"""Enumeration of the image size limit for the email alarm action."""
+enum EmailAlarmActionImageSizeLimit {
+  LARGE_DESKTOP
+  MINIMUM
+  MOBILE
+  ORIGINAL
+  SMALL_DESKTOP
+}
+
+"""The data type for the email alarm action update."""
+input EmailAlarmActionUpdateInput {
+  """Number of seconds after alarm for attaching images."""
+  afterAlarmSeconds: Int
+  """Number of seconds before alarm for attaching images."""
+  beforeAlarmSeconds: Int
+  """Identifier of the entity to update."""
+  id: String!
+  """Attached image size limit."""
+  imageSizeLimit: EmailAlarmActionImageSizeLimit
+  """Attach or not images to email."""
+  isImageAttached: Boolean
+  """Use long format for the email."""
+  isLongFormat: Boolean
+  """Email message."""
+  message: String
+  """Number of images to attach to email."""
+  numberOfImages: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""External alarm trigger resource definition."""
+type ExternalAlarmTrigger implements IAlarmTrigger {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related source component (digital input, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique event number for legacy recorders."""
+  eventNumber: Int!
+  """External trigger channel."""
+  externalTriggerChannel: Int!
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+  """External trigger type."""
+  triggerType: ExternalAlarmTriggerType!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the external alarm trigger creation."""
+input ExternalAlarmTriggerCreateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """External trigger channel."""
+  externalTriggerChannel: Int!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+  """External trigger type."""
+  triggerType: ExternalAlarmTriggerType!
+}
+
+"""The type of the external trigger."""
+enum ExternalAlarmTriggerType {
+  CHANNEL
+  GENERIC
+}
+
+"""The data type for the external alarm trigger update."""
+input ExternalAlarmTriggerUpdateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean
+  """External trigger channel."""
+  externalTriggerChannel: Int
+  """Identifier of the entity to update."""
+  id: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int
+  """External trigger type."""
+  triggerType: ExternalAlarmTriggerType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Scalar representing a set of fields."""
+scalar FieldSet
+
+"""Folder profile node resource definition."""
+type FolderNode implements IProfileNode {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """Identifier of the related alarm configuration."""
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node type."""
+  kind: String!
+  """Profile node name which is visible for user."""
+  name: String!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  profile: Profile!
+  """Profile node profile identifier."""
+  profileId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the folder profile node creation."""
+input FolderNodeCreateInput {
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Profile node name which is visible for user."""
+  name: String!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Profile node profile identifier."""
+  profileId: String!
+}
+
+input FolderNodeUpdateInput {
+  """Profile node description which is visible for user, optional."""
+  description: String
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node name which is visible for user."""
+  name: String
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Alarm action resource definition."""
+interface IAlarmAction {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Alarm trigger resource definition."""
+interface IAlarmTrigger {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related source component (digital input, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique event number for legacy recorders."""
+  eventNumber: Int!
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Profile node resource definition."""
+interface IProfileNode {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """Identifier of the related alarm configuration."""
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node type."""
+  kind: String!
+  """Profile node name which is visible for user."""
+  name: String!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Profile node profile identifier."""
+  profileId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+input IntOperationFilterInput {
+  eq: Int
+  gt: Int
+  gte: Int
+  in: [Int]
+  lt: Int
+  lte: Int
+  neq: Int
+  ngt: Int
+  ngte: Int
+  nin: [Int]
+  nlt: Int
+  nlte: Int
+}
+
+"""A connection to a list of items."""
+type ListAlarmActionsConnection {
+  """A list of edges."""
+  edges: [ListAlarmActionsEdge!]
+  """A flattened list of the nodes."""
+  nodes: [IAlarmAction!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListAlarmActionsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: IAlarmAction!
+}
+
+"""A connection to a list of items."""
+type ListAlarmConfigurationsConnection {
+  """A list of edges."""
+  edges: [ListAlarmConfigurationsEdge!]
+  """A flattened list of the nodes."""
+  nodes: [AlarmConfiguration!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListAlarmConfigurationsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: AlarmConfiguration!
+}
+
+"""A connection to a list of items."""
+type ListAlarmTriggersConnection {
+  """A list of edges."""
+  edges: [ListAlarmTriggersEdge!]
+  """A flattened list of the nodes."""
+  nodes: [IAlarmTrigger!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListAlarmTriggersEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: IAlarmTrigger!
+}
+
+"""A connection to a list of items."""
+type ListAlarmsByConfigurationIdsConnection {
+  """A list of edges."""
+  edges: [ListAlarmsByConfigurationIdsEdge!]
+  """A flattened list of the nodes."""
+  nodes: [Alarm!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListAlarmsByConfigurationIdsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: Alarm!
+}
+
+"""A connection to a list of items."""
+type ListAlarmsConnection {
+  """A list of edges."""
+  edges: [ListAlarmsEdge!]
+  """A flattened list of the nodes."""
+  nodes: [Alarm!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListAlarmsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: Alarm!
+}
+
+"""A connection to a list of items."""
+type ListAuditRecordsConnection {
+  """A list of edges."""
+  edges: [ListAuditRecordsEdge!]
+  """A flattened list of the nodes."""
+  nodes: [AuditRecord!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListAuditRecordsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: AuditRecord!
+}
+
+"""A connection to a list of items."""
+type ListDevicesConnection {
+  """A list of edges."""
+  edges: [ListDevicesEdge!]
+  """A flattened list of the nodes."""
+  nodes: [Device!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListDevicesEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: Device!
+}
+
+"""A connection to a list of items."""
+type ListDigitalSourcesConnection {
+  """A list of edges."""
+  edges: [ListDigitalSourcesEdge!]
+  """A flattened list of the nodes."""
+  nodes: [DigitalSource!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListDigitalSourcesEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: DigitalSource!
+}
+
+"""A connection to a list of items."""
+type ListProfileNodesConnection {
+  """A list of edges."""
+  edges: [ListProfileNodesEdge!]
+  """A flattened list of the nodes."""
+  nodes: [IProfileNode!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListProfileNodesEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: IProfileNode!
+}
+
+"""A connection to a list of items."""
+type ListProfilesConnection {
+  """A list of edges."""
+  edges: [ListProfilesEdge!]
+  """A flattened list of the nodes."""
+  nodes: [Profile!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListProfilesEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: Profile!
+}
+
+"""A connection to a list of items."""
+type ListRecordersConnection {
+  """A list of edges."""
+  edges: [ListRecordersEdge!]
+  """A flattened list of the nodes."""
+  nodes: [Recorder!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListRecordersEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: Recorder!
+}
+
+input ListStringOperationFilterInput {
+  all: StringOperationFilterInput
+  any: Boolean
+  none: StringOperationFilterInput
+  some: StringOperationFilterInput
+}
+
+"""A connection to a list of items."""
+type ListVideoChannelsConnection {
+  """A list of edges."""
+  edges: [ListVideoChannelsEdge!]
+  """A flattened list of the nodes."""
+  nodes: [VideoChannel!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListVideoChannelsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: VideoChannel!
+}
+
+"""A connection to a list of items."""
+type ListVideoStreamsConnection {
+  """A list of edges."""
+  edges: [ListVideoStreamsEdge!]
+  """A flattened list of the nodes."""
+  nodes: [VideoStream!]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type ListVideoStreamsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: VideoStream!
+}
+
+"""Metadata alarm trigger resource definition."""
+type MetadataAlarmTrigger implements IAlarmTrigger {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related source component (digital input, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique event number for legacy recorders."""
+  eventNumber: Int!
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """Source type of the metadata."""
+  sourceType: MetadataAlarmTriggerSourceType!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  """Zone identifier (if zone is not used, then it is null)."""
+  zoneId: String
+}
+
+"""The data type for the metadata alarm trigger creation."""
+input MetadataAlarmTriggerCreateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """Identifier of the related source of metadata."""
+  componentId: String!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """Source type of the metadata."""
+  sourceType: MetadataAlarmTriggerSourceType!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+  """Zone identifier (if zone is not used, then it is null)."""
+  zoneId: String
+}
+
+"""Enumeration of the metadata source types."""
+enum MetadataAlarmTriggerSourceType {
+  ANY
+  AUDIO
+  IO
+  TEXTDATA
+  VIDEO
+}
+
+"""The data type for the metadata alarm trigger update."""
+input MetadataAlarmTriggerUpdateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean
+  """Identifier of the entity to update."""
+  id: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  """Zone identifier (if zone is not used, then it is null)."""
+  zoneId: String
+}
+
+type Mutation {
+  """Add an alarm"""
+  addAlarm(obj: AlarmCreateInput!): Alarm!
+  """Add an alarm configuration"""
+  addAlarmConfiguration(obj: AlarmConfigurationCreateInput!): AlarmConfiguration!
+  """Add an alarm profile node"""
+  addAlarmProfileNode(obj: AlarmNodeCreateInput!): AlarmNode!
+  """Add an audio alarm trigger"""
+  addAudioAlarmTrigger(obj: AudioAlarmTriggerCreateInput!): AudioAlarmTrigger!
+  """Add an audio recording alarm action"""
+  addAudioRecordingAlarmAction(obj: AudioRecordingAlarmActionCreateInput!): AudioRecordingAlarmAction!
+  """Add a device"""
+  addDevice(obj: DeviceCreateInput!): Device!
+  """Add a digital input alarm trigger"""
+  addDigitalInputAlarmTrigger(obj: DigitalInputAlarmTriggerCreateInput!): DigitalInputAlarmTrigger!
+  """Add a digital input profile node"""
+  addDigitalInputProfileNode(obj: DigitalInputNodeCreateInput!): DigitalInputNode!
+  """Add a digital output alarm action"""
+  addDigitalOutputAlarmAction(obj: DigitalOutputAlarmActionCreateInput!): DigitalOutputAlarmAction!
+  """Add a digital output profile node"""
+  addDigitalOutputProfileNode(obj: DigitalOutputNodeCreateInput!): DigitalOutputNode!
+  """Add a digital source"""
+  addDigitalSource(obj: DigitalSourceCreateInput!): DigitalSource!
+  """Add a disable alarms alarm action"""
+  addDisableAlarmsAlarmAction(obj: DisableAlarmsAlarmActionCreateInput!): DisableAlarmsAlarmAction!
+  """Add a disable client zones alarm action"""
+  addDisableClientZonesAlarmAction(obj: DisableClientZonesAlarmActionCreateInput!): DisableClientZonesAlarmAction!
+  """Add an email alarm action"""
+  addEmailAlarmAction(obj: EmailAlarmActionCreateInput!): EmailAlarmAction!
+  """Add a external alarm trigger"""
+  addExternalAlarmTrigger(obj: ExternalAlarmTriggerCreateInput!): ExternalAlarmTrigger!
+  """Add a folder profile node"""
+  addFolderProfileNode(obj: FolderNodeCreateInput!): FolderNode!
+  """Add a list of alarm configurations"""
+  addManyAlarmConfigurations(objects: [AlarmConfigurationCreateInput!]!): [AlarmConfiguration!]!
+  """Add a list of alarms"""
+  addManyAlarms(objects: [AlarmCreateInput!]!): [Alarm!]!
+  """Add a list of devices"""
+  addManyDevices(objects: [DeviceCreateInput!]!): [Device!]!
+  """Add a list of digital sources"""
+  addManyDigitalSources(objects: [DigitalSourceCreateInput!]!): [DigitalSource!]!
+  """Add a list of profiles"""
+  addManyProfiles(objects: [ProfileCreateInput!]!): [Profile!]!
+  """Add a list of recorders"""
+  addManyRecorders(objects: [RecorderCreateInput!]!): [Recorder!]!
+  """Add a list of video channels"""
+  addManyVideoChannels(objects: [VideoChannelCreateInput!]!): [VideoChannel!]!
+  """Add a list of video streams"""
+  addManyVideoStreams(objects: [VideoStreamCreateInput!]!): [VideoStream!]!
+  """Add a metadata alarm trigger"""
+  addMetadataAlarmTrigger(obj: MetadataAlarmTriggerCreateInput!): MetadataAlarmTrigger!
+  """Add a profile"""
+  addProfile(obj: ProfileCreateInput!): Profile!
+  """Add a PTZ alarm action"""
+  addPtzAlarmAction(obj: PtzAlarmActionCreateInput!): PtzAlarmAction!
+  """Add a recorder"""
+  addRecorder(obj: RecorderCreateInput!): Recorder!
+  """Add a set motion mask alarm action"""
+  addSetMotionMaskAlarmAction(obj: SetMotionMaskAlarmActionCreateInput!): SetMotionMaskAlarmAction!
+  """Add a text alarm trigger"""
+  addTextAlarmTrigger(obj: TextAlarmTriggerCreateInput!): TextAlarmTrigger!
+  """Add a video alarm trigger"""
+  addVideoAlarmTrigger(obj: VideoAlarmTriggerCreateInput!): VideoAlarmTrigger!
+  """Add a video channel"""
+  addVideoChannel(obj: VideoChannelCreateInput!): VideoChannel!
+  """Add a video channel profile node"""
+  addVideoChannelProfileNode(obj: VideoChannelNodeCreateInput!): VideoChannelNode!
+  """Add a video recording alarm action"""
+  addVideoRecordingAlarmAction(obj: VideoRecordingAlarmActionCreateInput!): VideoRecordingAlarmAction!
+  """Add a video stream"""
+  addVideoStream(obj: VideoStreamCreateInput!): VideoStream!
+  """Delete an alarm by id"""
+  deleteAlarm(id: String!): Alarm!
+  """Delete an alarm action by id"""
+  deleteAlarmAction(id: String!): IAlarmAction!
+  """Delete an alarm configuration by id"""
+  deleteAlarmConfiguration(id: String!): AlarmConfiguration!
+  """Delete an alarm trigger by id"""
+  deleteAlarmTrigger(id: String!): IAlarmTrigger!
+  """Delete a device by id"""
+  deleteDevice(id: String!): Device!
+  """Delete a recorder by id"""
+  deleteDigitalSource(id: String!): DigitalSource!
+  """Delete a list of alarm actions"""
+  deleteManyAlarmActions(ids: [String!]!): [IAlarmAction!]!
+  """Delete a list of alarm configurations"""
+  deleteManyAlarmConfigurations(ids: [String!]!): [AlarmConfiguration!]!
+  """Delete a list of alarm triggers"""
+  deleteManyAlarmTriggers(ids: [String!]!): [IAlarmTrigger!]!
+  """Delete a list of alarms"""
+  deleteManyAlarms(ids: [String!]!): [Alarm!]!
+  """Delete a list of devices"""
+  deleteManyDevices(ids: [String!]!): [Device!]!
+  """Delete a list of recorders"""
+  deleteManyDigitalSources(ids: [String!]!): [DigitalSource!]!
+  """Delete a list of profile nodes"""
+  deleteManyProfileNodes(ids: [String!]!): [IProfileNode!]!
+  """Delete a list of profiles"""
+  deleteManyProfiles(ids: [String!]!): [Profile!]!
+  """Delete a list of recorders"""
+  deleteManyRecorders(ids: [String!]!): [Recorder!]!
+  """Delete a list of video channels"""
+  deleteManyVideoChannels(ids: [String!]!): [VideoChannel!]!
+  """Delete a list of video streams"""
+  deleteManyVideoStreams(ids: [String!]!): [VideoStream!]!
+  """Delete a profile by id"""
+  deleteProfile(id: String!): Profile!
+  """Delete a profile node by id"""
+  deleteProfileNode(id: String!): IProfileNode!
+  """Delete a recorder by id"""
+  deleteRecorder(id: String!): Recorder!
+  """Delete a video channel by id"""
+  deleteVideoChannel(id: String!): VideoChannel!
+  """Delete a video stream by id"""
+  deleteVideoStream(id: String!): VideoStream!
+  """Update an alarm"""
+  updateAlarm(obj: AlarmUpdateInput!): Alarm!
+  """Update an alarm configuration"""
+  updateAlarmConfiguration(obj: AlarmConfigurationUpdateInput!): AlarmConfiguration!
+  """Update an alarm profile node"""
+  updateAlarmProfileNode(obj: AlarmNodeUpdateInput!): AlarmNode!
+  """Update an audio alarm trigger"""
+  updateAudioAlarmTrigger(obj: AudioAlarmTriggerUpdateInput!): AudioAlarmTrigger!
+  """Update an audio recording alarm action"""
+  updateAudioRecordingAlarmAction(obj: AudioRecordingAlarmActionUpdateInput!): AudioRecordingAlarmAction!
+  """Update a device"""
+  updateDevice(obj: DeviceUpdateInput!): Device!
+  """Update a digital input alarm trigger"""
+  updateDigitalInputAlarmTrigger(obj: DigitalInputAlarmTriggerUpdateInput!): DigitalInputAlarmTrigger!
+  """Update a digital input profile node"""
+  updateDigitalInputProfileNode(obj: DigitalInputNodeUpdateInput!): DigitalInputNode!
+  """Update a digital output alarm action"""
+  updateDigitalOutputAlarmAction(obj: DigitalOutputAlarmActionUpdateInput!): DigitalOutputAlarmAction!
+  """Update a digital output profile node"""
+  updateDigitalOutputProfileNode(obj: DigitalOutputNodeUpdateInput!): DigitalOutputNode!
+  """Update a digital source"""
+  updateDigitalSource(obj: DigitalSourceUpdateInput!): DigitalSource!
+  """Update a disable alarms alarm action"""
+  updateDisableAlarmsAlarmAction(obj: DisableAlarmsAlarmActionUpdateInput!): DisableAlarmsAlarmAction!
+  """Update a disable client zones alarm action"""
+  updateDisableClientZonesAlarmAction(obj: DisableClientZonesAlarmActionUpdateInput!): DisableClientZonesAlarmAction!
+  """Update an email alarm action"""
+  updateEmailAlarmAction(obj: EmailAlarmActionUpdateInput!): EmailAlarmAction!
+  """Update a external alarm trigger"""
+  updateExternalAlarmTrigger(obj: ExternalAlarmTriggerUpdateInput!): ExternalAlarmTrigger!
+  """Update a folder profile node"""
+  updateFolderProfileNode(obj: FolderNodeUpdateInput!): FolderNode!
+  """Update a list of alarm configurations"""
+  updateManyAlarmConfigurations(objects: [AlarmConfigurationUpdateInput!]!): [AlarmConfiguration!]!
+  """Update a list of alarms"""
+  updateManyAlarms(objects: [AlarmUpdateInput!]!): [Alarm!]!
+  """Update a list of devices"""
+  updateManyDevices(objects: [DeviceUpdateInput!]!): [Device!]!
+  """Update a list of digtal sources"""
+  updateManyDigitalSources(objects: [DigitalSourceUpdateInput!]!): [DigitalSource!]!
+  """Update a list of profiles"""
+  updateManyProfiles(objects: [ProfileUpdateInput!]!): [Profile!]!
+  """Update a list of recorders"""
+  updateManyRecorders(objects: [RecorderUpdateInput!]!): [Recorder!]!
+  """Update a list of video channels"""
+  updateManyVideoChannels(objects: [VideoChannelUpdateInput!]!): [VideoChannel!]!
+  """Update a list of video streams"""
+  updateManyVideoStreams(objects: [VideoStreamUpdateInput!]!): [VideoStream!]!
+  """Update a metadata alarm trigger"""
+  updateMetadataAlarmTrigger(obj: MetadataAlarmTriggerUpdateInput!): MetadataAlarmTrigger!
+  """Update a profile"""
+  updateProfile(obj: ProfileUpdateInput!): Profile!
+  """Update a PTZ alarm action"""
+  updatePtzAlarmAction(obj: PtzAlarmActionUpdateInput!): PtzAlarmAction!
+  """Update a recorder"""
+  updateRecorder(obj: RecorderUpdateInput!): Recorder!
+  """Update a set motion mask alarm action"""
+  updateSetMotionMaskAlarmAction(obj: SetMotionMaskAlarmActionUpdateInput!): SetMotionMaskAlarmAction!
+  """Update a text alarm trigger"""
+  updateTextAlarmTrigger(obj: TextAlarmTriggerUpdateInput!): TextAlarmTrigger!
+  """Update a video alarm trigger"""
+  updateVideoAlarmTrigger(obj: VideoAlarmTriggerUpdateInput!): VideoAlarmTrigger!
+  """Update a video channel"""
+  updateVideoChannel(obj: VideoChannelUpdateInput!): VideoChannel!
+  """Update a video channel profile node"""
+  updateVideoChannelProfileNode(obj: VideoChannelNodeUpdateInput!): VideoChannelNode!
+  """Update a video recording alarm action"""
+  updateVideoRecordingAlarmAction(obj: VideoRecordingAlarmActionUpdateInput!): VideoRecordingAlarmAction!
+  """Update a video stream"""
+  updateVideoStream(obj: VideoStreamUpdateInput!): VideoStream!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+  """
+  Indicates whether more edges exist following the set defined by the clients arguments.
+  """
+  hasNextPage: Boolean!
+  """
+  Indicates whether more edges exist prior the set defined by the clients arguments.
+  """
+  hasPreviousPage: Boolean!
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+}
+
+"""Enumeration of the profile node actions."""
+enum PrimaryAction {
+  CAROUSEL
+  CLOSE_ARCHIVE
+  CONNECT
+  DELETE_ARCHIVE
+  DISCONNECT
+  DOME_CONTROL
+  MAKE_ARCHIVE
+  NO_ACTION
+  OPEN_ALARM_PLAYBACK
+  OPEN_PLAYBACK
+  OPEN_REALTIME
+  PULSE_STATE
+  REFRESH_STATE
+  SHOW_ACTIONS
+  SHOW_ALARM_VIEWS
+  SHOW_CAPTURE
+  SHOW_DESCRIPTION
+  SHOW_DOME
+  SHOW_INFO
+  SHOW_REFERENCE_IMAGE
+  SHOW_UPDATE
+  SWITCH_CAMERA
+  TOGGLE_STATE
+}
+
+"""Profile resource definition."""
+type Profile {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: ID!
+  """Profile settings (parameters that are currently chosen by client)."""
+  settings: ProfileSettings!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the profile creation."""
+input ProfileCreateInput {
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Resource display name which is visible for user."""
+  name: String!
+}
+
+"""Profile resource definition."""
+input ProfileFilterInput {
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  and: [ProfileFilterInput!]
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  or: [ProfileFilterInput!]
+  """Profile settings (parameters that are currently chosen by client)."""
+  settings: ProfileSettingsFilterInput
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+}
+
+"""Profile node resource definition."""
+input ProfileNodeFilterInput {
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  and: [ProfileNodeFilterInput!]
+  """Identifier of the related alarm configuration."""
+  componentId: StringOperationFilterInput
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Profile node description which is visible for user, optional."""
+  description: StringOperationFilterInput
+  """The icon set number for the profile node icon."""
+  iconSetNumber: StringOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  """Profile node type."""
+  kind: StringOperationFilterInput
+  """Profile node name which is visible for user."""
+  name: StringOperationFilterInput
+  or: [ProfileNodeFilterInput!]
+  """Profile node parent node identifier."""
+  parentNodeId: StringOperationFilterInput
+  """Profile node profile identifier."""
+  profileId: StringOperationFilterInput
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+}
+
+"""Profile node resource definition."""
+input ProfileNodeSortInput {
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """Identifier of the related alarm configuration."""
+  componentId: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Profile node description which is visible for user, optional."""
+  description: SortEnumType
+  """The icon set number for the profile node icon."""
+  iconSetNumber: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """Profile node type."""
+  kind: SortEnumType
+  """Profile node name which is visible for user."""
+  name: SortEnumType
+  """Profile node parent node identifier."""
+  parentNodeId: SortEnumType
+  """Profile node profile identifier."""
+  profileId: SortEnumType
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+}
+
+"""Profile settings definition."""
+type ProfileSettings {
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Resource display name which is visible for user."""
+  name: String!
+}
+
+"""Profile settings definition."""
+input ProfileSettingsFilterInput {
+  and: [ProfileSettingsFilterInput!]
+  """Resource custom description which is visible for user, optional."""
+  description: StringOperationFilterInput
+  """Is resource enabled or disabled."""
+  enabled: BooleanOperationFilterInput
+  """Resource display name which is visible for user."""
+  name: StringOperationFilterInput
+  or: [ProfileSettingsFilterInput!]
+}
+
+"""Profile settings definition."""
+input ProfileSettingsSortInput {
+  """Resource custom description which is visible for user, optional."""
+  description: SortEnumType
+  """Is resource enabled or disabled."""
+  enabled: SortEnumType
+  """Resource display name which is visible for user."""
+  name: SortEnumType
+}
+
+"""Profile resource definition."""
+input ProfileSortInput {
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """Profile settings (parameters that are currently chosen by client)."""
+  settings: ProfileSettingsSortInput
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+}
+
+input ProfileUpdateInput {
+  """Resource custom description which is visible for user, optional."""
+  description: String
+  """Is resource enabled or disabled."""
+  enabled: Boolean
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Resource display name which is visible for user."""
+  name: String
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""PTZ alarm action resource definition."""
+type PtzAlarmAction implements IAlarmAction {
+  """The PTZ action string."""
+  actionString: String!
+  """The PTZ action type."""
+  actionType: PtzAlarmActionType!
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  recorder: Recorder!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannel: VideoChannel!
+}
+
+"""The data type for the PTZ alarm action creation."""
+input PtzAlarmActionCreateInput {
+  """The PTZ action string."""
+  actionString: String!
+  """The PTZ action type."""
+  actionType: PtzAlarmActionType!
+  """Identifier of the related video channel."""
+  componentId: String!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+}
+
+"""Enumeration of the PTZ alarm action types."""
+enum PtzAlarmActionType {
+  PRESET
+  PROGRAM
+}
+
+"""The data type for the PTZ alarm action update."""
+input PtzAlarmActionUpdateInput {
+  """The PTZ action string."""
+  actionString: String
+  """The PTZ action type."""
+  actionType: PtzAlarmActionType
+  """Identifier of the entity to update."""
+  id: String!
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+type Query {
+  """Find an alarm by id"""
+  getAlarm(id: String!): Alarm!
+  """Find an alarm action by id"""
+  getAlarmAction(id: String!): IAlarmAction!
+  """Find an alarm configuration by id"""
+  getAlarmConfiguration(id: String!): AlarmConfiguration!
+  """Find an alarm trigger by id"""
+  getAlarmTrigger(id: String!): IAlarmTrigger!
+  """Find a device by id"""
+  getDevice(id: String!): Device!
+  """Find a digital source by id"""
+  getDigitalSource(id: String!): DigitalSource!
+  """Find a profile by id"""
+  getProfile(id: String!): Profile!
+  """Find a profile by id"""
+  getProfileNode(id: String!): IProfileNode!
+  """Find a recorder by id"""
+  getRecorder(id: String!): Recorder!
+  """Find a video channel by id"""
+  getVideoChannel(id: String!): VideoChannel!
+  """Find a video stream by id"""
+  getVideoStream(id: String!): VideoStream!
+  """List of alarm actions"""
+  listAlarmActions(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [AlarmActionSortInput!]
+    where: AlarmActionFilterInput
+  ): ListAlarmActionsConnection
+  """List of alarm configurations"""
+  listAlarmConfigurations(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [AlarmConfigurationSortInput!]
+    where: AlarmConfigurationFilterInput
+  ): ListAlarmConfigurationsConnection
+  """List of alarm triggers"""
+  listAlarmTriggers(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [AlarmTriggerSortInput!]
+    where: AlarmTriggerFilterInput
+  ): ListAlarmTriggersConnection
+  """List of alarms"""
+  listAlarms(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [AlarmSortInput!]
+    where: AlarmFilterInput
+  ): ListAlarmsConnection
+  """List of alarms filtered by configuration identifiers"""
+  listAlarmsByConfigurationIds(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    ids: [String!]!
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [AlarmSortInput!]
+    where: AlarmFilterInput
+  ): ListAlarmsByConfigurationIdsConnection
+  """Returns a list of audit records"""
+  listAuditRecords(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [AuditRecordSortInput!]
+    where: AuditRecordFilterInput
+  ): ListAuditRecordsConnection
+  """
+  Returns a list of devices with pagination, projection, sorting and filtering
+  """
+  listDevices(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [DeviceSortInput!]
+    where: DeviceFilterInput
+  ): ListDevicesConnection
+  """
+  Returns a list of digital sources with pagination, projection, sorting and filtering
+  """
+  listDigitalSources(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [DigitalSourceSortInput!]
+    where: DigitalSourceFilterInput
+  ): ListDigitalSourcesConnection
+  """List of profile nodes"""
+  listProfileNodes(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [ProfileNodeSortInput!]
+    where: ProfileNodeFilterInput
+  ): ListProfileNodesConnection
+  """List of profiles"""
+  listProfiles(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [ProfileSortInput!]
+    where: ProfileFilterInput
+  ): ListProfilesConnection
+  """
+  Returns a list of recorders with pagination, projection, sorting and filtering
+  """
+  listRecorders(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [RecorderSortInput!]
+    where: RecorderFilterInput
+  ): ListRecordersConnection
+  """
+  Returns a list of video channels with pagination, sorting and filtering
+  """
+  listVideoChannels(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [VideoChannelSortInput!]
+    where: VideoChannelFilterInput
+  ): ListVideoChannelsConnection
+  """Returns a list of video streams with pagination, sorting and filtering"""
+  listVideoStreams(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [VideoStreamSortInput!]
+    where: VideoStreamFilterInput
+  ): ListVideoStreamsConnection
+}
+
+"""
+Template for a Recorder entity that is used with relation to the DigitalSource entity.
+"""
+type Recorder {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  devices(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [DeviceSortInput!]
+    where: DeviceFilterInput
+  ): DevicesConnection
+  digitalSources(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [DigitalSourceSortInput!]
+    where: DigitalSourceFilterInput
+  ): DigitalSourcesConnection
+  """Unique identifier of the resource object (GUID string)."""
+  id: ID!
+  """Recorder settings."""
+  settings: RecorderSettings!
+  """
+  Firmware version for 3rd party devices and software version for Mirasys recorders.
+  """
+  softwareVersion: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Recorder status."""
+  status: RecorderStatus!
+  """Time zone of the recorder."""
+  timeZone: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannels(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [VideoChannelSortInput!]
+    where: VideoChannelFilterInput
+  ): VideoChannelsConnection
+  videoStreams(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [VideoStreamSortInput!]
+    where: VideoStreamFilterInput
+  ): VideoStreamsConnection
+}
+
+"""The data type for the recorder creation."""
+input RecorderCreateInput {
+  """
+  Network address to connect to the recorder (host IP address or DNS name).
+  """
+  address: String!
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Network address for multicasting"""
+  multicastAddress: String
+  """Resource display name which is visible for user."""
+  name: String!
+  """Network port to connect to the recorder."""
+  port: Int!
+}
+
+"""Recorder resource definition."""
+input RecorderFilterInput {
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  and: [RecorderFilterInput!]
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  or: [RecorderFilterInput!]
+  """Recorder settings."""
+  settings: RecorderSettingsFilterInput
+  """
+  Firmware version for 3rd party devices and software version for Mirasys recorders.
+  """
+  softwareVersion: StringOperationFilterInput
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """Recorder status."""
+  status: RecorderStatusFilterInput
+  """Time zone of the recorder."""
+  timeZone: StringOperationFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+}
+
+"""Recorder settings definition."""
+type RecorderSettings {
+  """
+  Network address to connect to the recorder (host IP address or DNS name).
+  """
+  address: String!
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Network address for multicasting"""
+  multicastAddress: String
+  """Resource display name which is visible for user."""
+  name: String!
+  """Network port to connect to the recorder."""
+  port: Int!
+}
+
+"""Recorder settings definition."""
+input RecorderSettingsFilterInput {
+  """
+  Network address to connect to the recorder (host IP address or DNS name).
+  """
+  address: StringOperationFilterInput
+  and: [RecorderSettingsFilterInput!]
+  """Resource custom description which is visible for user, optional."""
+  description: StringOperationFilterInput
+  """Is resource enabled or disabled."""
+  enabled: BooleanOperationFilterInput
+  """Network address for multicasting"""
+  multicastAddress: StringOperationFilterInput
+  """Resource display name which is visible for user."""
+  name: StringOperationFilterInput
+  or: [RecorderSettingsFilterInput!]
+  """Network port to connect to the recorder."""
+  port: IntOperationFilterInput
+}
+
+"""Recorder settings definition."""
+input RecorderSettingsSortInput {
+  """
+  Network address to connect to the recorder (host IP address or DNS name).
+  """
+  address: SortEnumType
+  """Resource custom description which is visible for user, optional."""
+  description: SortEnumType
+  """Is resource enabled or disabled."""
+  enabled: SortEnumType
+  """Network address for multicasting"""
+  multicastAddress: SortEnumType
+  """Resource display name which is visible for user."""
+  name: SortEnumType
+  """Network port to connect to the recorder."""
+  port: SortEnumType
+}
+
+"""Recorder resource definition."""
+input RecorderSortInput {
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """Recorder settings."""
+  settings: RecorderSettingsSortInput
+  """
+  Firmware version for 3rd party devices and software version for Mirasys recorders.
+  """
+  softwareVersion: SortEnumType
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """Recorder status."""
+  status: RecorderStatusSortInput
+  """Time zone of the recorder."""
+  timeZone: SortEnumType
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+}
+
+"""Recorder status definition."""
+type RecorderStatus {
+  """The adding condition of the recorder."""
+  added: Condition!
+  """The capabilities fetching condition of the recorder."""
+  capabilitiesReceived: Condition!
+  """The configuration condition of the recorder."""
+  configured: Condition!
+  """The connection condition of the recorder."""
+  connected: Condition!
+}
+
+"""Recorder status definition."""
+input RecorderStatusFilterInput {
+  """The adding condition of the recorder."""
+  added: ConditionFilterInput
+  and: [RecorderStatusFilterInput!]
+  """The capabilities fetching condition of the recorder."""
+  capabilitiesReceived: ConditionFilterInput
+  """The configuration condition of the recorder."""
+  configured: ConditionFilterInput
+  """The connection condition of the recorder."""
+  connected: ConditionFilterInput
+  or: [RecorderStatusFilterInput!]
+}
+
+"""Recorder status definition."""
+input RecorderStatusSortInput {
+  """The adding condition of the recorder."""
+  added: ConditionSortInput
+  """The capabilities fetching condition of the recorder."""
+  capabilitiesReceived: ConditionSortInput
+  """The configuration condition of the recorder."""
+  configured: ConditionSortInput
+  """The connection condition of the recorder."""
+  connected: ConditionSortInput
+}
+
+input RecorderUpdateInput {
+  """
+  Network address to connect to the recorder (host IP address or DNS name).
+  """
+  address: String
+  """Resource custom description which is visible for user, optional."""
+  description: String
+  """Is resource enabled or disabled."""
+  enabled: Boolean
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Network address for multicasting (host IP address or DNS name)."""
+  multicastAddress: String
+  """Resource display name which is visible for user."""
+  name: String
+  """Network port to connect to the recorder."""
+  port: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Type to define video resolution (width x height)."""
+type Resolution {
+  """Video resolution height."""
+  height: Int!
+  """Video resolution width."""
+  width: Int!
+}
+
+"""Type to define video resolution (width x height)."""
+input ResolutionFilterInput {
+  and: [ResolutionFilterInput!]
+  """Video resolution height."""
+  height: IntOperationFilterInput
+  or: [ResolutionFilterInput!]
+  """Video resolution width."""
+  width: IntOperationFilterInput
+}
+
+"""Type to define video resolution (width x height)."""
+input ResolutionInput {
+  """Video resolution height."""
+  height: Int!
+  """Video resolution width."""
+  width: Int!
+}
+
+"""Type to define video resolution (width x height)."""
+input ResolutionSortInput {
+  """Video resolution height."""
+  height: SortEnumType
+  """Video resolution width."""
+  width: SortEnumType
+}
+
+"""Set motion mask alarm action resource definition."""
+type SetMotionMaskAlarmAction implements IAlarmAction {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """Motion mask identifier."""
+  motionMaskId: String!
+  recorder: Recorder!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannel: VideoChannel!
+}
+
+"""The data type for the set motion mask action creation."""
+input SetMotionMaskAlarmActionCreateInput {
+  """Identifier of the related video channel."""
+  componentId: String!
+  """Motion mask identifier."""
+  motionMaskId: String!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+}
+
+"""The data type for the set motion mask action update."""
+input SetMotionMaskAlarmActionUpdateInput {
+  """Identifier of the entity to update."""
+  id: String!
+  """Motion mask identifier."""
+  motionMaskId: String
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  contains: String
+  endsWith: String
+  eq: String
+  in: [String]
+  ncontains: String
+  nendsWith: String
+  neq: String
+  nin: [String]
+  nstartsWith: String
+  or: [StringOperationFilterInput!]
+  startsWith: String
+}
+
+type Subscription {
+  addedAlarm(alarmConfigurationIds: [String!]!): Alarm!
+  addedAlarmAction: IAlarmAction!
+  addedAlarmConfiguration: AlarmConfiguration!
+  addedAlarmTrigger: IAlarmTrigger!
+  addedDevice: Device!
+  addedDigitalSource: DigitalSource!
+  addedManyAlarmConfigurations: [AlarmConfiguration!]!
+  addedManyAlarms(alarmConfigurationIds: [String!]!): [Alarm!]!
+  addedManyDevices: [Device!]!
+  addedManyDigitalSources: [DigitalSource!]!
+  addedManyProfiles: [Profile!]!
+  addedManyRecorders: [Recorder!]!
+  addedManyVideoChannels: [VideoChannel!]!
+  addedManyVideoStreams: [VideoStream!]!
+  addedProfile: Profile!
+  addedProfileNode: IProfileNode!
+  addedRecorder: Recorder!
+  addedVideoChannel: VideoChannel!
+  addedVideoStream: VideoStream!
+  deletedAlarm(alarmConfigurationIds: [String!]!): Alarm!
+  deletedAlarmAction: IAlarmAction!
+  deletedAlarmConfiguration: AlarmConfiguration!
+  deletedAlarmTrigger: IAlarmTrigger!
+  deletedDevice: Device!
+  deletedDigitalSource: DigitalSource!
+  deletedManyAlarmActions: [IAlarmAction!]!
+  deletedManyAlarmConfigurations: [AlarmConfiguration!]!
+  deletedManyAlarmTriggers: [IAlarmTrigger!]!
+  deletedManyAlarms(alarmConfigurationIds: [String!]!): [Alarm!]!
+  deletedManyDevices: [Device!]!
+  deletedManyDigitalSources: [DigitalSource!]!
+  deletedManyProfileNodes: [IProfileNode!]!
+  deletedManyProfiles: [Profile!]!
+  deletedManyRecorders: [Recorder!]!
+  deletedManyVideoChannels: [VideoChannel!]!
+  deletedManyVideoStreams: [VideoStream!]!
+  deletedProfile: Profile!
+  deletedProfileNode: IProfileNode!
+  deletedRecorder: Recorder!
+  deletedVideoChannel: VideoChannel!
+  deletedVideoStream: VideoStream!
+  updatedAlarm(alarmConfigurationIds: [String!]!): Alarm!
+  updatedAlarmAction: IAlarmAction!
+  updatedAlarmConfiguration: AlarmConfiguration!
+  updatedAlarmTrigger: IAlarmTrigger!
+  updatedDevice: Device!
+  updatedDigitalSource: DigitalSource!
+  updatedManyAlarmConfigurations: [AlarmConfiguration!]!
+  updatedManyAlarms(alarmConfigurationIds: [String!]!): [Alarm!]!
+  updatedManyDevices: [Device!]!
+  updatedManyDigitalSources: [DigitalSource!]!
+  updatedManyProfiles: [Profile!]!
+  updatedManyRecorders: [Recorder!]!
+  updatedManyVideoChannels: [VideoChannel!]!
+  updatedManyVideoStreams: [VideoStream!]!
+  updatedProfile: Profile!
+  updatedProfileNode: IProfileNode!
+  updatedRecorder: Recorder!
+  updatedVideoChannel: VideoChannel!
+  updatedVideoStream: VideoStream!
+}
+
+"""Text alarm trigger resource definition."""
+type TextAlarmTrigger implements IAlarmTrigger {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related source component (digital input, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique event number for legacy recorders."""
+  eventNumber: Int!
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """Text alarm trigger operation."""
+  operation: TextAlarmTriggerOperation!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""The data type for the text alarm trigger creation."""
+input TextAlarmTriggerCreateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """Identifier of the related text channel."""
+  componentId: String!
+  """Text alarm trigger operation."""
+  operation: TextAlarmTriggerOperation!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+}
+
+"""The type of the text alarm trigger operation."""
+enum TextAlarmTriggerOperation {
+  CONNECTION_LOST
+  DATA
+}
+
+"""The data type for the text alarm trigger update."""
+input TextAlarmTriggerUpdateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean
+  """Identifier of the entity to update."""
+  id: String!
+  """Text alarm trigger operation."""
+  operation: TextAlarmTriggerOperation
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Enumeration of the transport protocols."""
+enum Transport {
+  AUTOMATIC
+  RT_POVER_HTTP
+  RT_POVER_HTTPS
+  RT_POVER_MULTICAST
+  RT_POVER_RTSP
+  RT_POVER_UDP
+}
+
+input TransportOperationFilterInput {
+  eq: Transport
+  in: [Transport!]
+  neq: Transport
+  nin: [Transport!]
+}
+
+"""Video alarm trigger resource definition."""
+type VideoAlarmTrigger implements IAlarmTrigger {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related source component (digital input, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique event number for legacy recorders."""
+  eventNumber: Int!
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """
+  The motion mask identifier (it is required for the 'Motion' and 'NoMotion' operations).
+  """
+  motionMaskId: String
+  """Video alarm trigger operation."""
+  operation: VideoAlarmTriggerOperation!
+  recorder: Recorder!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannel: VideoChannel!
+}
+
+"""The data type for the video alarm trigger creation."""
+input VideoAlarmTriggerCreateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean!
+  """Identifier of the related video channel."""
+  componentId: String!
+  """
+  The motion mask identifier (it is required for the 'Motion' and 'NoMotion' operations).
+  """
+  motionMaskId: String
+  """Video alarm trigger operation."""
+  operation: VideoAlarmTriggerOperation!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int!
+}
+
+"""The type of the video alarm trigger operation."""
+enum VideoAlarmTriggerOperation {
+  MOTION
+  NO_MOTION
+  NO_SIGNAL
+}
+
+"""The data type for the video alarm trigger update."""
+input VideoAlarmTriggerUpdateInput {
+  """Indicates if acknowledgment is required."""
+  acknowledgeRequired: Boolean
+  """Identifier of the entity to update."""
+  id: String!
+  """
+  The motion mask identifier (it is required for the 'Motion' and 'NoMotion' operations).
+  """
+  motionMaskId: String
+  """Video alarm trigger operation."""
+  operation: VideoAlarmTriggerOperation
+  """Alarm trigger tolerance time in seconds."""
+  toleranceSeconds: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""
+Template for a VideoChannel entity that is used with relation to the VideoChannelNode entity.
+"""
+type VideoChannel {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  device: Device!
+  """Identifier of parent device."""
+  deviceId: String!
+  """Unique identifier of the resource object (GUID string)."""
+  id: ID!
+  recorder: Recorder!
+  """Identifier of parent recorder."""
+  recorderId: String!
+  """The Base64 encoded reference image."""
+  referenceImage: String
+  """Video channel settings."""
+  settings: VideoChannelSettings!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Video channel status."""
+  status: VideoChannelStatus!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannelNodes(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [ProfileNodeSortInput!]
+    where: ProfileNodeFilterInput
+  ): VideoChannelNodesConnection
+  videoStreams(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    """Returns the first _n_ elements from the list."""
+    first: Int
+    """Returns the last _n_ elements from the list."""
+    last: Int
+    order: [VideoStreamSortInput!]
+    where: VideoStreamFilterInput
+  ): VideoStreamsConnection
+}
+
+"""The data type for the video channel creation."""
+input VideoChannelCreateInput {
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Identifier of parent device."""
+  deviceId: String!
+  """Is dewarping enabled for the video channel."""
+  dewarpingEnabled: Boolean!
+  """
+  Is edge storage enabled for the channel (used for all streams with enabled recording).
+  """
+  edgeStorageEnabled: Boolean!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Is multiple streaming enabled for the channel."""
+  multipleStreamingEnabled: Boolean!
+  """Resource display name which is visible for user."""
+  name: String!
+  """Identifier of parent recorder."""
+  recorderId: String!
+  """The Base64 encoded reference image."""
+  referenceImage: String
+}
+
+"""Video channel resource definition."""
+input VideoChannelFilterInput {
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  and: [VideoChannelFilterInput!]
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Identifier of parent device."""
+  deviceId: StringOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  or: [VideoChannelFilterInput!]
+  """Identifier of parent recorder."""
+  recorderId: StringOperationFilterInput
+  """The Base64 encoded reference image."""
+  referenceImage: StringOperationFilterInput
+  """Video channel settings."""
+  settings: VideoChannelSettingsFilterInput
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """Video channel status."""
+  status: VideoChannelStatusFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+}
+
+"""Video channel profile node resource definition."""
+type VideoChannelNode implements IProfileNode {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """Identifier of the related alarm configuration."""
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  """Indicates if export of video channel node is allowed."""
+  exportAllowed: Boolean!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node type."""
+  kind: String!
+  """Profile node name which is visible for user."""
+  name: String!
+  """If true, ignores PTZ warnings in video channel node."""
+  noTakePTZWarning: Boolean!
+  """Indicates if PTZ control opens automatically in video channel node."""
+  openPTZControlAutomatically: Boolean!
+  """
+  Indicates if PTZ control opens when camera is selected in video channel node.
+  """
+  openPTZWhenCameraSelected: Boolean!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates if playback is allowed."""
+  playbackAllowed: Boolean!
+  """Indicated the primary action for the video channel node."""
+  primaryAction: PrimaryAction!
+  profile: Profile!
+  """Profile node profile identifier."""
+  profileId: String!
+  """Indicates if PTZ control in video channel node is allowed."""
+  ptzAllowed: Boolean!
+  """Indicates the closing time of PTZ control in video channel node."""
+  ptzCloseTime: DateTime
+  """Indicates if realtime video channel node is allowed."""
+  realtimeAllowed: Boolean!
+  """Number of the shortcut."""
+  shortcutNumber: Int!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Indicates if PTZ owhership control in video channel node is on."""
+  takePTZOwnership: Boolean!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannel: VideoChannel!
+}
+
+"""The data type for the video channel profile node creation."""
+input VideoChannelNodeCreateInput {
+  """Identifier of the related video channel."""
+  componentId: String!
+  """Profile node description which is visible for user, optional."""
+  description: String!
+  """Indicates if export of video channel node is allowed."""
+  exportAllowed: Boolean!
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Profile node name which is visible for user."""
+  name: String!
+  """If true, ignores PTZ warnings in video channel node."""
+  noTakePTZWarning: Boolean!
+  """Indicates if PTZ control opens automatically in video channel node."""
+  openPTZControlAutomatically: Boolean!
+  """
+  Indicates if PTZ control opens when camera is selected in video channel node.
+  """
+  openPTZWhenCameraSelected: Boolean!
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates if playback is allowed."""
+  playbackAllowed: Boolean!
+  """Indicated the primary action for the video channel node."""
+  primaryAction: PrimaryAction!
+  """Profile node profile identifier."""
+  profileId: String!
+  """Indicates if PTZ control in video channel node is allowed."""
+  ptzAllowed: Boolean!
+  """Indicates the closing time of PTZ control in video channel node."""
+  ptzCloseTime: DateTime
+  """Indicates if realtime video channel node is allowed."""
+  realtimeAllowed: Boolean!
+  """Indicates if PTZ owhership control in video channel node is on."""
+  takePTZOwnership: Boolean!
+}
+
+input VideoChannelNodeUpdateInput {
+  """Profile node description which is visible for user, optional."""
+  description: String
+  """Indicates if export of video channel node is allowed."""
+  exportAllowed: Boolean
+  """The icon set number for the profile node icon."""
+  iconSetNumber: String
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Profile node name which is visible for user."""
+  name: String
+  """If true, ignores PTZ warnings in video channel node."""
+  noTakePTZWarning: Boolean
+  """Indicates if PTZ control opens automatically in video channel node."""
+  openPTZControlAutomatically: Boolean
+  """
+  Indicates if PTZ control opens when camera is selected in video channel node.
+  """
+  openPTZWhenCameraSelected: Boolean
+  """Profile node parent node identifier."""
+  parentNodeId: String
+  """Indicates if playback is allowed."""
+  playbackAllowed: Boolean
+  """Indicated the primary action for the video channel node."""
+  primaryAction: PrimaryAction
+  """Indicates if PTZ control in video channel node is allowed."""
+  ptzAllowed: Boolean
+  """Indicates the closing time of PTZ control in video channel node."""
+  ptzCloseTime: DateTime
+  """Indicates if realtime video channel node is allowed."""
+  realtimeAllowed: Boolean
+  """Indicates if PTZ owhership control in video channel node is on."""
+  takePTZOwnership: Boolean
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""A connection to a list of items."""
+type VideoChannelNodesConnection {
+  """A list of edges."""
+  edges: [VideoChannelNodesEdge!]
+  """A flattened list of the nodes."""
+  nodes: [VideoChannelNode]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type VideoChannelNodesEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: VideoChannelNode
+}
+
+"""Video channel settings definition."""
+type VideoChannelSettings {
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Is dewarping enabled for the video channel."""
+  dewarpingEnabled: Boolean!
+  """
+  Is edge storage enabled for the channel (used for all streams with enabled recording).
+  """
+  edgeStorageEnabled: Boolean!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Is multiple streaming enabled for the channel."""
+  multipleStreamingEnabled: Boolean!
+  """Resource display name which is visible for user."""
+  name: String!
+}
+
+"""Video channel settings definition."""
+input VideoChannelSettingsFilterInput {
+  and: [VideoChannelSettingsFilterInput!]
+  """Resource custom description which is visible for user, optional."""
+  description: StringOperationFilterInput
+  """Is dewarping enabled for the video channel."""
+  dewarpingEnabled: BooleanOperationFilterInput
+  """
+  Is edge storage enabled for the channel (used for all streams with enabled recording).
+  """
+  edgeStorageEnabled: BooleanOperationFilterInput
+  """Is resource enabled or disabled."""
+  enabled: BooleanOperationFilterInput
+  """Is multiple streaming enabled for the channel."""
+  multipleStreamingEnabled: BooleanOperationFilterInput
+  """Resource display name which is visible for user."""
+  name: StringOperationFilterInput
+  or: [VideoChannelSettingsFilterInput!]
+}
+
+"""Video channel settings definition."""
+input VideoChannelSettingsSortInput {
+  """Resource custom description which is visible for user, optional."""
+  description: SortEnumType
+  """Is dewarping enabled for the video channel."""
+  dewarpingEnabled: SortEnumType
+  """
+  Is edge storage enabled for the channel (used for all streams with enabled recording).
+  """
+  edgeStorageEnabled: SortEnumType
+  """Is resource enabled or disabled."""
+  enabled: SortEnumType
+  """Is multiple streaming enabled for the channel."""
+  multipleStreamingEnabled: SortEnumType
+  """Resource display name which is visible for user."""
+  name: SortEnumType
+}
+
+"""Video channel resource definition."""
+input VideoChannelSortInput {
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Identifier of parent device."""
+  deviceId: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """Identifier of parent recorder."""
+  recorderId: SortEnumType
+  """The Base64 encoded reference image."""
+  referenceImage: SortEnumType
+  """Video channel settings."""
+  settings: VideoChannelSettingsSortInput
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """Video channel status."""
+  status: VideoChannelStatusSortInput
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+}
+
+"""Video channel status definition."""
+type VideoChannelStatus {
+  """The configuration condition of the video channel."""
+  configured: Condition!
+  """The connection condition of the video channel."""
+  connected: Condition!
+}
+
+"""Video channel status definition."""
+input VideoChannelStatusFilterInput {
+  and: [VideoChannelStatusFilterInput!]
+  """The configuration condition of the video channel."""
+  configured: ConditionFilterInput
+  """The connection condition of the video channel."""
+  connected: ConditionFilterInput
+  or: [VideoChannelStatusFilterInput!]
+}
+
+"""Video channel status definition."""
+input VideoChannelStatusSortInput {
+  """The configuration condition of the video channel."""
+  configured: ConditionSortInput
+  """The connection condition of the video channel."""
+  connected: ConditionSortInput
+}
+
+input VideoChannelUpdateInput {
+  """Resource custom description which is visible for user, optional."""
+  description: String
+  """Is dewarping enabled for the video channel."""
+  dewarpingEnabled: Boolean
+  """
+  Is edge storage enabled for the channel (used for all streams with enabled recording).
+  """
+  edgeStorageEnabled: Boolean
+  """Is resource enabled or disabled."""
+  enabled: Boolean
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Is multiple streaming enabled for the channel."""
+  multipleStreamingEnabled: Boolean
+  """Resource display name which is visible for user."""
+  name: String
+  """The Base64 encoded reference image."""
+  referenceImage: String
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""A connection to a list of items."""
+type VideoChannelsConnection {
+  """A list of edges."""
+  edges: [VideoChannelsEdge!]
+  """A flattened list of the nodes."""
+  nodes: [VideoChannel]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type VideoChannelsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: VideoChannel
+}
+
+"""Video recording alarm action resource definition."""
+type VideoRecordingAlarmAction implements IAlarmAction {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """
+  Identifier of the related destination component (digital output, video channel, etc.).
+  """
+  componentId: String!
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Alarm trigger type."""
+  kind: String!
+  """Number of seconds for post-recording (0 - post-recording is disabled)."""
+  postRecordingSeconds: Int!
+  """Number of seconds for pre-recording (0 - pre-recording is disabled)."""
+  preRecordingSeconds: Int!
+  recorder: Recorder!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """
+  Framerate of the recorded video (if it is 0, then current framerate must be used).
+  """
+  recordingFramerate: Int!
+  """
+  Resolution of the recorded video (if it 0x0, then current video resolution must be used).
+  """
+  recordingResolution: Resolution!
+  """Number of seconds to record."""
+  recordingSeconds: Int!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannel: VideoChannel!
+}
+
+"""The data type for the video recording alarm action creation."""
+input VideoRecordingAlarmActionCreateInput {
+  """Identifier of the related video channel."""
+  componentId: String!
+  """Number of seconds for post-recording (0 - post-recording is disabled)."""
+  postRecordingSeconds: Int!
+  """Number of seconds for pre-recording (0 - pre-recording is disabled)."""
+  preRecordingSeconds: Int!
+  """Identifier of the parent recorder."""
+  recorderId: String!
+  """
+  Framerate of the recorded video (if it is 0, then current framerate must be used).
+  """
+  recordingFramerate: Int!
+  """Resolution of the recorded video."""
+  recordingResolution: ResolutionInput!
+  """Number of seconds to record."""
+  recordingSeconds: Int!
+}
+
+"""The data type for the video recording alarm action update."""
+input VideoRecordingAlarmActionUpdateInput {
+  """Identifier of the entity to update."""
+  id: String!
+  """Number of seconds for post-recording (0 - post-recording is disabled)."""
+  postRecordingSeconds: Int
+  """Number of seconds for pre-recording (0 - pre-recording is disabled)."""
+  preRecordingSeconds: Int
+  """
+  Framerate of the recorded video (if it is 0, then current framerate must be used).
+  """
+  recordingFramerate: Int
+  """
+  Resolution of the recorded video (if it 0x0, then current video resolution must be used).
+  """
+  recordingResolution: ResolutionInput
+  """Number of seconds to record."""
+  recordingSeconds: Int
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""Video stream resource definition."""
+type VideoStream {
+  """The name of the user who added this resource."""
+  addedBy: String
+  """The timestamp when the resource was added."""
+  addedTime: DateTime
+  """The name of the user who deleted this resource."""
+  deletedBy: String
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTime
+  device: Device!
+  """Identifier of parent device."""
+  deviceId: String!
+  """Unique identifier of the resource object (GUID string)."""
+  id: ID!
+  recorder: Recorder!
+  """Identifier of parent recorder."""
+  recorderId: String!
+  """Video stream settings."""
+  settings: VideoStreamSettings!
+  """The version of the specification which the resource uses."""
+  specVersion: String!
+  """Video stream status."""
+  status: VideoStreamStatus!
+  """The name of the user who updated this resource."""
+  updatedBy: String
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTime
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+  videoChannel: VideoChannel!
+  """Identifier of parent video channel."""
+  videoChannelId: String!
+}
+
+"""The data type for the video stream creation."""
+input VideoStreamCreateInput {
+  """Bitrate value of the video stream."""
+  bitrate: Int!
+  """Bitrate mode of the video stream."""
+  bitrateMode: BitrateMode!
+  """Compression format of the video stream."""
+  compression: Compression!
+  """Control mode of the video stream."""
+  controlMode: ControlMode!
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Identifier of parent device."""
+  deviceId: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Frame rate of the video stream (0 to disable)."""
+  framerate: Int!
+  """Resource display name which is visible for user."""
+  name: String!
+  """Video quality of the video stream (in percents)."""
+  quality: Int!
+  """Identifier of parent recorder."""
+  recorderId: String!
+  """Resolution of the video stream."""
+  resolution: ResolutionInput!
+  """Transport protocol of the video stream."""
+  transport: Transport!
+  """Identifier of parent video channel."""
+  videoChannelId: String!
+}
+
+"""Video stream resource definition."""
+input VideoStreamFilterInput {
+  """The name of the user who added this resource."""
+  addedBy: StringOperationFilterInput
+  """The timestamp when the resource was added."""
+  addedTime: DateTimeOperationFilterInput
+  and: [VideoStreamFilterInput!]
+  """The name of the user who deleted this resource."""
+  deletedBy: StringOperationFilterInput
+  """The timestamp when the resource was deleted."""
+  deletedTime: DateTimeOperationFilterInput
+  """Identifier of parent device."""
+  deviceId: StringOperationFilterInput
+  """Unique identifier of the resource object (GUID string)."""
+  id: StringOperationFilterInput
+  or: [VideoStreamFilterInput!]
+  """Identifier of parent recorder."""
+  recorderId: StringOperationFilterInput
+  """Video stream settings."""
+  settings: VideoStreamSettingsFilterInput
+  """The version of the specification which the resource uses."""
+  specVersion: StringOperationFilterInput
+  """Video stream status."""
+  status: VideoStreamStatusFilterInput
+  """The name of the user who updated this resource."""
+  updatedBy: StringOperationFilterInput
+  """The timestamp when the resource was updated."""
+  updatedTime: DateTimeOperationFilterInput
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: StringOperationFilterInput
+  """Identifier of parent video channel."""
+  videoChannelId: StringOperationFilterInput
+}
+
+"""Video stream specification definition."""
+type VideoStreamSettings {
+  """Bitrate value of the video stream."""
+  bitrate: Int!
+  """Bitrate mode of the video stream."""
+  bitrateMode: BitrateMode!
+  """Compression format of the video stream."""
+  compression: Compression!
+  """Control mode of the video stream."""
+  controlMode: ControlMode!
+  """Resource custom description which is visible for user, optional."""
+  description: String!
+  """Is resource enabled or disabled."""
+  enabled: Boolean!
+  """Frame rate of the video stream (0 to disable)."""
+  framerate: Int!
+  """Resource display name which is visible for user."""
+  name: String!
+  """Video quality of the video stream (in percents)."""
+  quality: Int!
+  """Resolution of the video stream."""
+  resolution: Resolution!
+  """Transport protocol of the video stream."""
+  transport: Transport!
+}
+
+"""Video stream specification definition."""
+input VideoStreamSettingsFilterInput {
+  and: [VideoStreamSettingsFilterInput!]
+  """Bitrate value of the video stream."""
+  bitrate: IntOperationFilterInput
+  """Bitrate mode of the video stream."""
+  bitrateMode: BitrateModeOperationFilterInput
+  """Compression format of the video stream."""
+  compression: CompressionOperationFilterInput
+  """Control mode of the video stream."""
+  controlMode: ControlModeOperationFilterInput
+  """Resource custom description which is visible for user, optional."""
+  description: StringOperationFilterInput
+  """Is resource enabled or disabled."""
+  enabled: BooleanOperationFilterInput
+  """Frame rate of the video stream (0 to disable)."""
+  framerate: IntOperationFilterInput
+  """Resource display name which is visible for user."""
+  name: StringOperationFilterInput
+  or: [VideoStreamSettingsFilterInput!]
+  """Video quality of the video stream (in percents)."""
+  quality: IntOperationFilterInput
+  """Resolution of the video stream."""
+  resolution: ResolutionFilterInput
+  """Transport protocol of the video stream."""
+  transport: TransportOperationFilterInput
+}
+
+"""Video stream specification definition."""
+input VideoStreamSettingsSortInput {
+  """Bitrate value of the video stream."""
+  bitrate: SortEnumType
+  """Bitrate mode of the video stream."""
+  bitrateMode: SortEnumType
+  """Compression format of the video stream."""
+  compression: SortEnumType
+  """Control mode of the video stream."""
+  controlMode: SortEnumType
+  """Resource custom description which is visible for user, optional."""
+  description: SortEnumType
+  """Is resource enabled or disabled."""
+  enabled: SortEnumType
+  """Frame rate of the video stream (0 to disable)."""
+  framerate: SortEnumType
+  """Resource display name which is visible for user."""
+  name: SortEnumType
+  """Video quality of the video stream (in percents)."""
+  quality: SortEnumType
+  """Resolution of the video stream."""
+  resolution: ResolutionSortInput
+  """Transport protocol of the video stream."""
+  transport: SortEnumType
+}
+
+"""Video stream resource definition."""
+input VideoStreamSortInput {
+  """The name of the user who added this resource."""
+  addedBy: SortEnumType
+  """The timestamp when the resource was added."""
+  addedTime: SortEnumType
+  """The name of the user who deleted this resource."""
+  deletedBy: SortEnumType
+  """The timestamp when the resource was deleted."""
+  deletedTime: SortEnumType
+  """Identifier of parent device."""
+  deviceId: SortEnumType
+  """Unique identifier of the resource object (GUID string)."""
+  id: SortEnumType
+  """Identifier of parent recorder."""
+  recorderId: SortEnumType
+  """Video stream settings."""
+  settings: VideoStreamSettingsSortInput
+  """The version of the specification which the resource uses."""
+  specVersion: SortEnumType
+  """Video stream status."""
+  status: VideoStreamStatusSortInput
+  """The name of the user who updated this resource."""
+  updatedBy: SortEnumType
+  """The timestamp when the resource was updated."""
+  updatedTime: SortEnumType
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: SortEnumType
+  """Identifier of parent video channel."""
+  videoChannelId: SortEnumType
+}
+
+"""Video stream status definition."""
+type VideoStreamStatus {
+  """The configuration condition of the video stream."""
+  configured: Condition!
+  """The connection condition of the video stream."""
+  connected: Condition!
+  """The creating condition of the video stream."""
+  created: Condition!
+}
+
+"""Video stream status definition."""
+input VideoStreamStatusFilterInput {
+  and: [VideoStreamStatusFilterInput!]
+  """The configuration condition of the video stream."""
+  configured: ConditionFilterInput
+  """The connection condition of the video stream."""
+  connected: ConditionFilterInput
+  """The creating condition of the video stream."""
+  created: ConditionFilterInput
+  or: [VideoStreamStatusFilterInput!]
+}
+
+"""Video stream status definition."""
+input VideoStreamStatusSortInput {
+  """The configuration condition of the video stream."""
+  configured: ConditionSortInput
+  """The connection condition of the video stream."""
+  connected: ConditionSortInput
+  """The creating condition of the video stream."""
+  created: ConditionSortInput
+}
+
+input VideoStreamUpdateInput {
+  """Bitrate value of the video stream."""
+  bitrate: Int
+  """Bitrate mode of the video stream."""
+  bitrateMode: BitrateMode
+  """Compression format of the video stream."""
+  compression: Compression
+  """Control mode of the video stream."""
+  controlMode: ControlMode
+  """Resource custom description which is visible for user, optional."""
+  description: String
+  """Is resource enabled or disabled."""
+  enabled: Boolean
+  """Frame rate of the video stream (0 to disable)."""
+  framerate: Int
+  """Unique identifier of the resource object (GUID string)."""
+  id: String!
+  """Resource display name which is visible for user."""
+  name: String
+  """Video quality of the video stream (in percents)."""
+  quality: Int
+  """Resolution of the video stream."""
+  resolution: ResolutionInput
+  """Transport protocol of the video stream."""
+  transport: Transport
+  """
+  Version of resource object, is used for optimistic concurrency control.
+  """
+  version: String!
+}
+
+"""A connection to a list of items."""
+type VideoStreamsConnection {
+  """A list of edges."""
+  edges: [VideoStreamsEdge!]
+  """A flattened list of the nodes."""
+  nodes: [VideoStream]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"""An edge in a connection."""
+type VideoStreamsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The item at the end of the edge."""
+  node: VideoStream
+}
+
+scalar openfed__Scope

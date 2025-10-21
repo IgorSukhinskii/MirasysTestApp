@@ -33,6 +33,10 @@
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
+    "@0no-co/graphqlsp": "^1.15.0",
+    "@graphql-codegen/cli": "^6.0.0",
+    "@graphql-codegen/schema-ast": "^5.0.0",
+    "@parcel/watcher": "^2.5.1",
     "@types/react": "~19.1.0",
     "react-test-renderer": "19.1.0",
     "typescript": "~5.9.2"

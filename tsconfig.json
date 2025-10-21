@@ -1,13 +1,16 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "target": "ES6", // Requires ES6 and above
     "strict": true,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
+      "@/*": ["./src/*"],
       "@assets/*": ["./assets/*"]
-    }
+    },
+    "plugins": [{
+      "name": "@0no-co/graphqlsp",
+      "schema": "./schema.graphql"
+    }]
   },
   "include": [
     "**/*.ts",
