@@ -85,3 +85,19 @@ See no reason to switch
 
 ### Tech choices: conclusion
 Either switch to Relay or stick with Apollo. I'll update it with the result after I'm done trying things out.
+Well, looks like I stuck with Apollo successfully.
+
+### Zustand
+It turns out that what I really needed was (unsurprisingly) a state management library.
+Trying to use Apollo to juggle client-side UI-only flat list state was miserable and I do not wish it upon my worst enemy.
+Zustand to the rescue. I've defined a simple store that has 2 core data structures:
+
+```ts
+type TreeStore = {
+  // ...
+  visibleFlatNodes: VisibleTreeNode[];
+  nodesByRoot: Record<string, Node[]>;
+}
+```
+
+The way it works is simple: when new data comes in through an Apollo subscription on one of the folders (or `null` in case of top-level elements), it is put into `nodesByRoot` keyed by it's `parentNodeId` query parameter. When that happens, we also rebuild `visibleFlatNodes` from `nodesByRoot` using simple recursive tree walk. This way, `visibleFlatNodes` contains exclusively the elements we can see in the list (it handles collapsed/expanded folders), each element has `level` allowing us to offset them to create a convincing nesting illusion, and we can just feed it into a `FlatList` as-is, making sure it re-renders only when necessary. We also update `visibleFlatNodes` when expanding/collapsing folders.

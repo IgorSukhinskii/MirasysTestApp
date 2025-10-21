@@ -30,7 +30,8 @@
     "react-native-screens": "~4.16.0",
     "react-native-web": "~0.21.0",
     "react-native-worklets": "0.5.1",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.15.0",

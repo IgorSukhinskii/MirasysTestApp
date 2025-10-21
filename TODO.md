@@ -45,14 +45,14 @@ Zustand
 1. ~~Implement authentication as in https://docs.expo.dev/router/advanced/authentication/~~
 1. ~~Put in my own authentication logic with auth routes based on fetch()~~
 1. ~~Use SecureStore to store tokens on the device~~
-1. Use Zustand to store tokens in memory (or Context?)
+1. ~~Use Zustand to store tokens in memory (or Context?)~~
 1. Make it pretty
 
 ### TreeView
-1. Implement the TreeView component
-    - Basic TreeView with collapsible directories
-    - Lazy loading and infinite scroll
-    - Allow the same in subdirectories (this is hard)
+1. ~~Implement the TreeView component~~
+    - ~~Basic TreeView with collapsible directories~~
+    - ~~Lazy loading and infinite scroll~~
+    - ~~Allow the same in subdirectories (this is hard)~~
 1. Unit tests for TreeView
     - Basic usage
     - Fetching
@@ -60,10 +60,10 @@ Zustand
     - Infinite scroll subdir
 
 ### Main Page
-1. Implement GraphQL fetching logic via apollo-client
-1. Store the data in Zustand
-1. Use TreeView to display data
-1. Hook all the lazy loading functionality
+1. ~~Implement GraphQL fetching logic via apollo-client~~
+1. ~~Store the data in Zustand~~
+1. ~~Use TreeView to display data~~
+1. ~~Hook all the lazy loading functionality~~
 1. Icons for content types
 
 ### Building
@@ -80,3 +80,9 @@ Zustand
 ### Housekeeping
 1. ~~Remove all the unnecessary code and deps from the template~~
 1. ~~Stop flashbanging~~
+1. Handle all the TODOs in code
+1. Remove debug-logging
+1. ESLint & Prettier (why didn't I start with this?)
+1. Fix huge ugly nav headers
+1. Cleanup on logout?
+1. Bug: empty folders will always fetch on expand
