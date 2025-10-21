@@ -5,7 +5,15 @@ import { relayStylePagination } from '@apollo/client/utilities';
 
 export const ListProfileNodes = graphql(`
 query ListProfileNodes($parentNodeId: String, $first: Int!, $after: String) {
-  listProfileNodes(where: {parentNodeId: {eq: $parentNodeId}}, first: $first, after: $after) {
+  listProfileNodes(
+
+    where: {
+      parentNodeId: {eq: $parentNodeId},
+      deletedTime: {eq: null} # not interested in deleted items
+    },
+    first: $first,
+    after: $after) {
+
     edges {
       cursor
       node {
@@ -13,6 +21,7 @@ query ListProfileNodes($parentNodeId: String, $first: Int!, $after: String) {
         kind
         name
         parentNodeId
+        deletedTime
       }
     }
     pageInfo {

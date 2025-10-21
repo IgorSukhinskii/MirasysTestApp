@@ -14,10 +14,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\nquery ListProfileNodes($parentNodeId: String, $first: Int!, $after: String) {\n  listProfileNodes(where: {parentNodeId: {eq: $parentNodeId}}, first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        kind\n        name\n        parentNodeId\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}": typeof types.ListProfileNodesDocument,
+    "\nquery ListProfileNodes($parentNodeId: String, $first: Int!, $after: String) {\n  listProfileNodes(\n\n    where: {\n      parentNodeId: {eq: $parentNodeId},\n      deletedTime: {eq: null} # not interested in deleted items\n    },\n    first: $first,\n    after: $after) {\n\n    edges {\n      cursor\n      node {\n        id\n        kind\n        name\n        parentNodeId\n        deletedTime\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}": typeof types.ListProfileNodesDocument,
 };
 const documents: Documents = {
-    "\nquery ListProfileNodes($parentNodeId: String, $first: Int!, $after: String) {\n  listProfileNodes(where: {parentNodeId: {eq: $parentNodeId}}, first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        kind\n        name\n        parentNodeId\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}": types.ListProfileNodesDocument,
+    "\nquery ListProfileNodes($parentNodeId: String, $first: Int!, $after: String) {\n  listProfileNodes(\n\n    where: {\n      parentNodeId: {eq: $parentNodeId},\n      deletedTime: {eq: null} # not interested in deleted items\n    },\n    first: $first,\n    after: $after) {\n\n    edges {\n      cursor\n      node {\n        id\n        kind\n        name\n        parentNodeId\n        deletedTime\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}": types.ListProfileNodesDocument,
 };
 
 /**
@@ -37,7 +37,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\nquery ListProfileNodes($parentNodeId: String, $first: Int!, $after: String) {\n  listProfileNodes(where: {parentNodeId: {eq: $parentNodeId}}, first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        kind\n        name\n        parentNodeId\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}"): (typeof documents)["\nquery ListProfileNodes($parentNodeId: String, $first: Int!, $after: String) {\n  listProfileNodes(where: {parentNodeId: {eq: $parentNodeId}}, first: $first, after: $after) {\n    edges {\n      cursor\n      node {\n        id\n        kind\n        name\n        parentNodeId\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}"];
+export function graphql(source: "\nquery ListProfileNodes($parentNodeId: String, $first: Int!, $after: String) {\n  listProfileNodes(\n\n    where: {\n      parentNodeId: {eq: $parentNodeId},\n      deletedTime: {eq: null} # not interested in deleted items\n    },\n    first: $first,\n    after: $after) {\n\n    edges {\n      cursor\n      node {\n        id\n        kind\n        name\n        parentNodeId\n        deletedTime\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}"): (typeof documents)["\nquery ListProfileNodes($parentNodeId: String, $first: Int!, $after: String) {\n  listProfileNodes(\n\n    where: {\n      parentNodeId: {eq: $parentNodeId},\n      deletedTime: {eq: null} # not interested in deleted items\n    },\n    first: $first,\n    after: $after) {\n\n    edges {\n      cursor\n      node {\n        id\n        kind\n        name\n        parentNodeId\n        deletedTime\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

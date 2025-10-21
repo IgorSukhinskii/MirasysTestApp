@@ -58,7 +58,7 @@ Logically, it still makes sense, since we want to keep track of individual subfo
 So we need to maintain the existing GraphQL fetching logic and slap another, local-only flat list on top of it that does the following things:
 
 1. Keep the order of elements that respects the hierarchy.
-   That means that children go directly after their folder.
+   That means that children go directly after their parent folder.
    It also means that collapsing removes all the direct and indirect children from after the folder.
 1. Handle new data coming in.
 1. Keep track of visibility of each item.
@@ -79,3 +79,9 @@ In short, what we need to do in order to achieve that is:
 
 ### Relay
 Relay needs mostly the same stuff but it correctly handles pagination out of the box (since our API provides relay-style PageInfo). It also gives us Fragments which allow us to nicely encode the nested structure.
+
+### URQL / ReactQuery / etc...
+See no reason to switch
+
+### Tech choices: conclusion
+Either switch to Relay or stick with Apollo. I'll update it with the result after I'm done trying things out.
