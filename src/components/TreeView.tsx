@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { ActivityIndicator, FlatList, TouchableOpacity } from "react-native";
+import { ActivityIndicator, FlatList, TouchableOpacity, View } from "react-native";
 
-import { Text, View } from "@/components/Themed";
+import { Text } from "@/components/Themed";
 import { useFolderActions } from "@/hooks/useFolderActions";
 import { useTreeStore } from "@/hooks/useTreeStore";
 

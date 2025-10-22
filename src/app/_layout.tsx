@@ -1,5 +1,5 @@
 import { SessionProvider, useSession } from '@/auth/ctx';
-import { View } from '@/components/Themed';
+import { BackgroundView } from '@/components/Themed';
 
 import { GLOBAL_TITLE } from '@/constants/strings';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
@@ -28,7 +28,7 @@ function RootNavigator() {
   return (
     <ThemeProvider value={theme}>
       {/* Global background themed view prevents white flashes on dark theme */}
-      <View style={{ flex: 1 }}>
+      <BackgroundView style={{ flex: 1 }}>
         <Stack>
           <Stack.Protected guard={isLoggedIn}>
             <Stack.Screen name="(app)" options={{ headerShown: false}} />
@@ -38,7 +38,7 @@ function RootNavigator() {
             <Stack.Screen name="sign-in" options={{ title: GLOBAL_TITLE }} />
           </Stack.Protected>
         </Stack>
-      </View>
+      </BackgroundView>
     </ThemeProvider>
   );
 }

@@ -1,6 +1,7 @@
 import { useSession } from '@/auth/ctx';
 import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useThemeColor } from './Themed';
 
 export function HeaderContextMenu() {
   const [visible, setVisible] = useState(false);
@@ -14,6 +15,9 @@ export function HeaderContextMenu() {
     closeMenu();
   };
 
+  const color = useThemeColor({}, 'text');
+  const backgroundColor = useThemeColor({}, 'background');
+
   return (
     <>
       <Pressable
@@ -24,7 +28,7 @@ export function HeaderContextMenu() {
         ]}
         onPress={openMenu}
       >
-        <Text style={styles.icon}>⋮</Text>
+        <Text style={[styles.icon, { color }]}>⋮</Text>
       </Pressable>
 
       <Modal

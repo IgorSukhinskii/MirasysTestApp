@@ -1,8 +1,8 @@
 import { useSession } from '@/auth/ctx';
 
-import { TextInput, View } from '@/components/Themed';
+import { TextInput } from '@/components/Themed';
 import { useState } from 'react';
-import { Button } from 'react-native';
+import { Button, View } from 'react-native';
 
 
 export default function SignIn() {
