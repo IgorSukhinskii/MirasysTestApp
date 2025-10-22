@@ -11,10 +11,19 @@ The simplest way to run it is by using Expo Go app on your device.
 
 1. Download Expo Go from your app store
 1. Clone this repo
+1. Make sure that your phone and your machine are on the same local network, and that your machine has an open port 8081
 1. `npm i`
 1. `npm start`
 1. You'll see a QR code in your terminal, scan it with Expo Go
 1. You're good to go
+
+In case running the app through Expo Go is inconvenient for you for whatever reason:
+
+```bash
+npm run web
+```
+
+Starts a web version of the app in your browser.
 
 # Building the app
 To be continued...
