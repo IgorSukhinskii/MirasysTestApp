@@ -54,10 +54,10 @@ Zustand
     - ~~Lazy loading and infinite scroll~~
     - ~~Allow the same in subdirectories (this is hard)~~
     - ~~Add activity indicator when loading more items~~
-1. Unit tests for TreeView
-    - Basic usage
-    - Fetching
-    - Infinite scroll
+1. ~~Unit tests for TreeView~~
+    - ~~Basic usage~~
+    - ~~Fetching~~
+    - ~~Infinite scroll~~
     - Infinite scroll subdir
 
 ### Main Page
@@ -76,13 +76,13 @@ Zustand
 1. Logout
 1. CI config
 1. Icons, splash screen
-1. Tests
+1. ~~Tests~~
 
 ### Housekeeping
 1. ~~Remove all the unnecessary code and deps from the template~~
 1. ~~Stop flashbanging~~
 1. Handle all the TODOs in code
-1. Remove debug-logging
+1. ~~Remove debug-logging~~
 1. ESLint & Prettier (why didn't I start with this?)
 1. Fix huge ugly nav headers
 1. Cleanup on logout?
