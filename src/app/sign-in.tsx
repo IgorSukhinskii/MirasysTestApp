@@ -12,7 +12,7 @@ export default function SignIn() {
   const { signIn } = useSession();
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, justifyContent: 'center', gap: 20, paddingHorizontal: 40 }}>
       <TextInput
         placeholder="Username"
         value={username}

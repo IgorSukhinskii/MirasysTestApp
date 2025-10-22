@@ -11,6 +11,8 @@ export {
   ErrorBoundary
 } from 'expo-router';
 
+const GLOBAL_TITLE = 'Mirasys Test App';
+
 export default function RootLayout() {
   return (
     <SessionProvider>
@@ -28,7 +30,7 @@ function RootNavigator() {
     <ThemeProvider value={theme}>
       {/* Global background themed view prevents white flashes on dark theme */}
       <View style={{ flex: 1 }}>
-        <Stack>
+        <Stack screenOptions={{ title: GLOBAL_TITLE }} >
           <Stack.Protected guard={isLoggedIn}>
             <Stack.Screen name="(app)" />
           </Stack.Protected>

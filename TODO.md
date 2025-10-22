@@ -46,7 +46,7 @@ Zustand
 1. ~~Put in my own authentication logic with auth routes based on fetch()~~
 1. ~~Use SecureStore to store tokens on the device~~
 1. ~~Use Zustand to store tokens in memory (or Context?)~~
-1. Make it pretty
+1. ~~Make it pretty~~
 
 ### TreeView
 1. ~~Implement the TreeView component~~
@@ -74,7 +74,7 @@ Zustand
 1. Account screen
 1. ~~Logout~~
 1. CI config
-1. Icons, splash screen
+1. ~~Icons~~, splash screen
 1. ~~Tests~~
 
 ### Housekeeping
@@ -83,6 +83,6 @@ Zustand
 1. Handle all the TODOs in code
 1. ~~Remove debug-logging~~
 1. ESLint & Prettier (why didn't I start with this?)
-1. Fix huge ugly nav headers
+1. ~~Fix huge ugly nav headers~~
 1. Cleanup on logout?
 1. Bug: empty folders will always fetch on expand

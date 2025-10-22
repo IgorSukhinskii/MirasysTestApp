@@ -5,7 +5,7 @@ export default function AppLayout() {
   // Provide Apollo Context only for authenticated routes
   return (
     <ApolloProviderWithSession>
-      <Stack />
+      <Stack screenOptions={{ headerShown: false }} />
     </ApolloProviderWithSession>
   );
 }
