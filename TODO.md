@@ -58,7 +58,6 @@ Zustand
     - ~~Basic usage~~
     - ~~Fetching~~
     - ~~Infinite scroll~~
-    - Infinite scroll subdir
 
 ### Main Page
 1. ~~Implement GraphQL fetching logic via apollo-client~~
@@ -73,7 +72,7 @@ Zustand
 
 ### Extras
 1. Account screen
-1. Logout
+1. ~~Logout~~
 1. CI config
 1. Icons, splash screen
 1. ~~Tests~~

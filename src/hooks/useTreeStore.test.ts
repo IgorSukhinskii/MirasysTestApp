@@ -68,16 +68,16 @@ describe('useTreeStore', () => {
         { id: '1.2', name: 'AB', kind: 'FileNode', parentNodeId: '1' },
       ]);
       setNodesByRoot('3', [
-        { id: '3.1', name: 'CA', kind: 'FileNode', parentNodeId: '1' },
-        { id: '3.2', name: 'CB', kind: 'FileNode', parentNodeId: '1' },
+        { id: '3.1', name: 'CA', kind: 'FileNode', parentNodeId: '3' },
+        { id: '3.2', name: 'CB', kind: 'FileNode', parentNodeId: '3' },
       ]);
       setNodesByRoot('5', [
-        { id: '5.1', name: 'EA', kind: 'FileNode', parentNodeId: '1' },
-        { id: '5.2', name: 'EB', kind: 'FolderNode', parentNodeId: '1' },
+        { id: '5.1', name: 'EA', kind: 'FileNode', parentNodeId: '5' },
+        { id: '5.2', name: 'EB', kind: 'FolderNode', parentNodeId: '5' },
       ]);
       setNodesByRoot('5.2', [
-        { id: '5.2.1', name: 'EBA', kind: 'FileNode', parentNodeId: '1' },
-        { id: '5.2.2', name: 'EBB', kind: 'FileNode', parentNodeId: '1' },
+        { id: '5.2.1', name: 'EBA', kind: 'FileNode', parentNodeId: '5.2' },
+        { id: '5.2.2', name: 'EBB', kind: 'FileNode', parentNodeId: '5.2' },
       ]);
     });
 
