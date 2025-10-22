@@ -1,6 +1,7 @@
 import { SessionProvider, useSession } from '@/auth/ctx';
 import { View } from '@/components/Themed';
 
+import { GLOBAL_TITLE } from '@/constants/strings';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { useColorScheme } from 'react-native';
@@ -10,8 +11,6 @@ export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary
 } from 'expo-router';
-
-const GLOBAL_TITLE = 'Mirasys Test App';
 
 export default function RootLayout() {
   return (
@@ -30,13 +29,13 @@ function RootNavigator() {
     <ThemeProvider value={theme}>
       {/* Global background themed view prevents white flashes on dark theme */}
       <View style={{ flex: 1 }}>
-        <Stack screenOptions={{ title: GLOBAL_TITLE }} >
+        <Stack>
           <Stack.Protected guard={isLoggedIn}>
-            <Stack.Screen name="(app)" />
+            <Stack.Screen name="(app)" options={{ headerShown: false}} />
           </Stack.Protected>
 
           <Stack.Protected guard={!isLoggedIn}>
-            <Stack.Screen name="sign-in" />
+            <Stack.Screen name="sign-in" options={{ title: GLOBAL_TITLE }} />
           </Stack.Protected>
         </Stack>
       </View>
