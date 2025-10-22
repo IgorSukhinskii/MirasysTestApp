@@ -22,6 +22,7 @@ export function TreeView() {
     <FlatList
       data={visibleFlatNodes}
       keyExtractor={(item) => item.node.id}
+      contentContainerStyle={{ paddingBottom: 200 }}
       renderItem={({ item }) => {
         const isFolder = item.node.kind === "FolderNode";
         const isExpanded = expanded[item.node.id];
@@ -52,6 +53,11 @@ export function TreeView() {
         const last = visibleFlatNodes[visibleFlatNodes.length - 1];
         if (!last) return;
         fetchMoreForFolder(last.node.parentNodeId ?? null);
+      }}
+      ListFooterComponent={() => {
+        if (loading[ROOT_ID]) {
+          return (<ActivityIndicator size="large" />);
+        }
       }}
     />
   );

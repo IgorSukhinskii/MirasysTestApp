@@ -53,6 +53,7 @@ Zustand
     - ~~Basic TreeView with collapsible directories~~
     - ~~Lazy loading and infinite scroll~~
     - ~~Allow the same in subdirectories (this is hard)~~
+    - ~~Add activity indicator when loading more items~~
 1. Unit tests for TreeView
     - Basic usage
     - Fetching
