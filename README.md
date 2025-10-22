@@ -17,15 +17,10 @@ The simplest way to run it is by using Expo Go app on your device.
 1. You'll see a QR code in your terminal, scan it with Expo Go
 1. You're good to go
 
-In case running the app through Expo Go is inconvenient for you for whatever reason:
-
-```bash
-npm run web
-```
-
-Starts a web version of the app in your browser.
+Note: you can't really use the web version of this app because of CORS. So if you cannot use Expo Go, then you can build a development or production build of the app for your device/emulator.
 
 # Building the app
+
 To be continued...
 
 # Tests
