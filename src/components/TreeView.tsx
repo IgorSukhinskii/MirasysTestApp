@@ -7,6 +7,15 @@ import { useTreeStore } from "@/hooks/useTreeStore";
 
 const ROOT_ID = "__root__"; // TODO: extract
 
+const ICONS: Record<string, string[]> = {
+  FolderNode: ['📁', '📂'],
+  AlarmNode: ['⏰'],
+  DigitalInputNode: ['⬇️'],
+  DigitalOutputNode: ['⬆️'],
+  VideoChannelNode: ['📹'],
+  default: ['📄'],
+};
+
 export function TreeView() {
   const { visibleFlatNodes, expanded, loading } = useTreeStore();
   const { toggleFolder, fetchMoreForFolder } = useFolderActions();
@@ -28,21 +37,18 @@ export function TreeView() {
         const isExpanded = expanded[item.node.id];
         const isLoading = loading[item.node.id];
 
+        const iconSet = ICONS[item.node.kind] ?? ICONS['default'];
+        const icon = isFolder && isExpanded ? iconSet[1] : iconSet[0];
+
         return (
           <TouchableOpacity
             disabled={!isFolder}
             onPress={() => isFolder && toggleFolder(item.node.id)}
           >
             <View style={{ marginLeft: item.level * 16, flexDirection: "row", height: 40 }}>
-              {isFolder ? (
-                <>
-                  <Text style={textStyle}>{isExpanded ? "📂" : "📁"}</Text>
-                  {isLoading && <ActivityIndicator size="small" />}
-                </>
-              ) : (
-                <Text style={textStyle}>📄</Text>
-              )}
+              <Text style={textStyle}>{icon}</Text>
               <Text style={textStyle}> {item.node.name}</Text>
+              {isLoading && <ActivityIndicator size="small" />}
             </View>
           </TouchableOpacity>
         );

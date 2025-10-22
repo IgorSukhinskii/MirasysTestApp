@@ -64,7 +64,7 @@ Zustand
 1. ~~Store the data in Zustand~~
 1. ~~Use TreeView to display data~~
 1. ~~Hook all the lazy loading functionality~~
-1. Icons for content types
+1. ~~Icons for content types~~
 
 ### Building
 1. Configure Android build pipeline in devenv (try to avoid AndroidStudio)
