@@ -21,7 +21,6 @@ export function useFolderActions() {
 
   function watchFolder(folderId: string | null) {
     const key = folderId ?? ROOT_ID;
-    console.log('Watch', key);
     if (activeWatchers.has(key)) return;
 
     const watcher = client
@@ -32,7 +31,6 @@ export function useFolderActions() {
       })
       .subscribe({
         next: (result) => {
-          console.log('Subscription event', result);
           const edges = result.data?.listProfileNodes?.edges ?? [];
           // using (e: any) because generated types lie about stuff being optional
           const nodes = edges.map((e: any) => e.node);
@@ -51,7 +49,6 @@ export function useFolderActions() {
 
   function toggleFolder(folderId: string | null) {
     const key = folderId ?? ROOT_ID;
-    console.log('Toggle', key);
     const nextExpanded = !expanded[key];
     setExpanded(key, nextExpanded);
 
