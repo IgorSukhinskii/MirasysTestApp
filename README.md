@@ -21,7 +21,37 @@ Note: you can't really use the web version of this app because of CORS. So if yo
 
 # Building the app
 
-To be continued...
+First of all, this app is built with [devenv](https://devenv.sh/). This tool allows us to fix all of our dependencies (including system packages) and build our app in a reproducible fashion. It can be installed on Linux, MacOS or WSL2. The following instructions assume you have the command `devenv` available in your terminal.
+
+NOTE: If you do not want to install `devenv`, I'm working on a Dockerfile and a .devcontainer spec that uses them under the hood.
+
+First of all, enter the interactive shell which makes available all of our dependencies (Node, JDK, Android SDK, etc.)
+
+```bash
+devenv shell
+```
+
+Then you have options depending on the platform (currently only Android supported).
+
+## Android
+
+Build a debug version:
+```bash
+npm run build:android
+```
+
+Build a release version:
+```bash
+npm run build:android:release
+```
+
+Run a debug build on your device:
+```bash
+# make sure that you have a connected device or an emulator
+adb devices
+# now build and run your app
+npm run android
+```
 
 # Tests
 
