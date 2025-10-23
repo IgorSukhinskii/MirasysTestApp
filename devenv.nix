@@ -5,6 +5,12 @@
   android = {
     enable = true;
     reactNative.enable = true;
+
+    platforms.version = ["36"];
+    platformTools.version = "36.0.0";
+    buildTools.version = ["35.0.0" "36.0.0"];
+    ndk.enable = true;
+    ndk.version = ["27.1.12297006"];
     # android-studio.enable = true;
   };
 
