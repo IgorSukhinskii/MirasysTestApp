@@ -1,4 +1,5 @@
 import { useSession } from '@/auth/ctx';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useThemeColor } from './Themed';
@@ -6,14 +7,10 @@ import { useThemeColor } from './Themed';
 export function HeaderContextMenu() {
   const [visible, setVisible] = useState(false);
   const { signOut } = useSession();
+  const router = useRouter();
 
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
-
-  const onItemPress = (item: string) => {
-    console.log('Selected', item);
-    closeMenu();
-  };
 
   const color = useThemeColor({}, 'text');
   const backgroundColor = useThemeColor({}, 'background');
@@ -39,7 +36,10 @@ export function HeaderContextMenu() {
       >
         <Pressable style={styles.overlay} onPress={closeMenu}>
           <View style={styles.menu}>
-            <TouchableOpacity style={styles.menuItem} onPress={() => onItemPress('Item 1')}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => {
+              closeMenu();
+              router.navigate('/account');
+            }}>
               <Text style={styles.menuText}>Account Info</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.menuItem} onPress={signOut}>

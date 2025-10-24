@@ -1,4 +1,4 @@
-import { createContext, use, type PropsWithChildren } from 'react';
+import { createContext, use, useState, type PropsWithChildren } from 'react';
 
 import { apiFetch, FetchError } from '@/utils/apiFetch';
 import { useStorageState } from './useStorageState';
@@ -17,18 +17,30 @@ type SessionInfo = {
 
 type SessionResponse = {
   data: SessionInfo;
-}
+};
 
-const AuthContext = createContext<{
+export type UserInfo = {
+  username: string;
+  publicName: string;
+  language: string;
+};
+
+type SessionContext = {
   signIn: (username: string, password: string) => void;
   signOut: () => void;
   refresh: () => void;
+  getUserInfo: () => void;
+  userInfo: UserInfo | null;
   session: SessionInfo | null;
   isLoggedIn: boolean;
-}>({
+};
+
+const AuthContext = createContext<SessionContext>({
   signIn: () => null,
   signOut: () => null,
   refresh: () => null,
+  getUserInfo: () => null,
+  userInfo: null,
   session: null,
   isLoggedIn: false,
 });
@@ -44,6 +56,7 @@ export function useSession() {
 
 export function SessionProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useStorageState<SessionInfo>('session');
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   return (
     <AuthContext
@@ -76,6 +89,11 @@ export function SessionProvider({ children }: PropsWithChildren) {
               }
             });
         },
+        getUserInfo() {
+          apiFetch<{ data: UserInfo }>('/users/me', undefined, "GET", { cookie: JSON.stringify(session)})
+            .then(response => setUserInfo(response.data));
+        },
+        userInfo,
         session,
         isLoggedIn: session !== null
       }}>

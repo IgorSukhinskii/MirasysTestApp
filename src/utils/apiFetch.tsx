@@ -30,13 +30,15 @@ export class FetchError extends Error {
 }
 
 /**
- * Sends a POST request to a specified API endpoint and returns the parsed JSON response.
+ * Sends a request (defaults to POST) to a specified API endpoint and returns the parsed JSON response.
  *
  * Handles network, HTTP, and parsing errors consistently by throwing a structured {@link FetchError}.
  *
  * @template TResponse - The expected type of the response data.
  * @param {string} endpoint - The API endpoint to call (relative to `baseUrl` defined in expoConfig.extra).
  * @param {any} body - The request payload to send in the POST body. Will be serialized as JSON.
+ * @param {"POST" | "GET" | undefined} method - Optional. Method used in the request. Defaults to POST.
+ * @param {Record<string, string> | undefined} headers - Optional. Additional headers to send. 
  * @returns {Promise<TResponse>} A promise that resolves with the parsed JSON response of type
  * `TResponse` if successful, or rejects with a {@link FetchError} describing the error.
  *
@@ -61,16 +63,22 @@ export class FetchError extends Error {
  *     }
  *   });
  */
-export async function apiFetch<TResponse>(endpoint: string, body: any): Promise<TResponse> {
+export async function apiFetch<TResponse>(
+  endpoint: string,
+  body: any,
+  method: "POST" | "GET" = "POST",
+  headers: Record<string, string> = {}
+): Promise<TResponse> {
   try {
     const url = new URL(endpoint, baseUrl);
     const response = await fetch(url, {
-      method: 'POST',
+      method: method,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        ...headers
       },
-      body: JSON.stringify(body),
+      body: body != null ? JSON.stringify(body) : undefined,
     });
 
     const rawText = await response.text(); // Read the body once safely
