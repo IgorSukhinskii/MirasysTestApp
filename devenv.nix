@@ -16,6 +16,8 @@
 
   cachix.enable = false;
 
+  devcontainer.enable = true;
+
   # https://devenv.sh/processes/
   processes.emulator.exec = "emulator -avd phone -skin 720x1280";
   processes.expo-go.exec = "npx expo start";
