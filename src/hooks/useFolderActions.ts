@@ -16,7 +16,8 @@ export function useFolderActions() {
     setLoading,
     setNodesByRoot,
     pageInfoByRoot,
-    setPageInfoByRoot
+    setPageInfoByRoot,
+    resetStore,
   } = useTreeStore();
 
   function watchFolder(folderId: string | null) {
@@ -100,5 +101,11 @@ export function useFolderActions() {
     activeWatchers.clear();
   }
 
-  return { toggleFolder, fetchMoreForFolder, cleanup };
+  async function refresh() {
+    await client.clearStore();
+    resetStore();
+    cleanup();
+  }
+
+  return { toggleFolder, fetchMoreForFolder, cleanup, refresh };
 }

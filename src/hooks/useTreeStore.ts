@@ -31,6 +31,8 @@ type TreeState = {
 
   pageInfoByRoot: Record<string, PageInfo>;
   setPageInfoByRoot: (rootId: string, pageInfo: PageInfo) => void;
+
+  resetStore: () => void;
 };
 
 function flattenTree(nodes: Record<string, Node[]>, expanded: Record<string, boolean>) {
@@ -97,6 +99,16 @@ export const useTreeStore = create<TreeState>()(set => ({
         ...s.pageInfoByRoot,
         [rootId]: pageInfo
       }
+    }));
+  },
+
+  resetStore() {
+    set(s => ({
+      expanded: {},
+      loading: {},
+      nodesByRoot: {},
+      pageInfoByRoot: {},
+      visibleFlatNodes: [],
     }));
   },
 }));

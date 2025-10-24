@@ -18,7 +18,8 @@ const ICONS: Record<string, string[]> = {
 
 export function TreeView() {
   const { visibleFlatNodes, expanded, loading } = useTreeStore();
-  const { toggleFolder, fetchMoreForFolder } = useFolderActions();
+  const { toggleFolder, fetchMoreForFolder, refresh } = useFolderActions();
+  const isRefreshing = loading[ROOT_ID] ?? false;
 
   const isRootExpanded = expanded[ROOT_ID];
   // Expand root automatically once
@@ -32,6 +33,8 @@ export function TreeView() {
       data={visibleFlatNodes}
       keyExtractor={(item) => item.node.id}
       contentContainerStyle={{ paddingBottom: 200 }}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
       renderItem={({ item }) => {
         const isFolder = item.node.kind === "FolderNode";
         const isExpanded = expanded[item.node.id];
