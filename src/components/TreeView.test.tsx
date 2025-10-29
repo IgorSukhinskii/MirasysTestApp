@@ -16,9 +16,8 @@ jest.mock('@/hooks/useTreeStore', () => ({
   useTreeStore: jest.fn(),
 }));
 
+import { ROOT_ID } from '@/constants/strings';
 import { useTreeStore } from '@/hooks/useTreeStore';
-
-const ROOT_ID = '__root__';
 
 describe('TreeView', () => {
   beforeEach(() => {

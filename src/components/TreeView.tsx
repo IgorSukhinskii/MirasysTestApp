@@ -2,10 +2,9 @@ import { useEffect } from "react";
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@/components/Themed";
+import { ROOT_ID } from "@/constants/strings";
 import { useFolderActions } from "@/hooks/useFolderActions";
 import { useTreeStore } from "@/hooks/useTreeStore";
-
-const ROOT_ID = "__root__"; // TODO: extract
 
 const ICONS: Record<string, string[]> = {
   FolderNode: ['📁', '📂'],

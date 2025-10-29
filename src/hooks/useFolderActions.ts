@@ -1,12 +1,11 @@
 import { useApolloClient } from "@apollo/client/react";
 import type { Subscription } from "rxjs";
 
+import { ROOT_ID } from "@/constants/strings";
 import { useTreeStore } from "@/hooks/useTreeStore";
 import { ListProfileNodes } from "@/queries/listProfileNodes";
 
 const activeWatchers = new Map<string | null, Subscription>();
-const ROOT_ID = "__root__"; // TODO: extract
-
 export function useFolderActions() {
   const client = useApolloClient();
   const {

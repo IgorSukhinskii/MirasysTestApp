@@ -1,3 +1,4 @@
+import { ROOT_ID } from '@/constants/strings';
 import { useFolderActions } from '@/hooks/useFolderActions';
 import { useTreeStore } from '@/hooks/useTreeStore';
 import { act, renderHook } from '@testing-library/react-native';
@@ -5,8 +6,6 @@ import { act, renderHook } from '@testing-library/react-native';
 const mockWatchQuery = jest.fn();
 const mockReadQuery = jest.fn();
 const mockQuery = jest.fn();
-
-const ROOT_ID = '__root__';
 
 jest.mock('@apollo/client/react', () => ({
   useApolloClient: () => ({
